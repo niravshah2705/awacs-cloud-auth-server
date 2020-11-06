@@ -35,13 +35,13 @@ public class OAuth2Config extends AuthorizationServerConfigurerAdapter {
 		.scopes("all")
 		.authorizedGrantTypes("client_credentials")
 		.and()
-		.withClient("b")//client username: b
-		.secret(passwordEncoder().encode("b")) //password: b
+		.withClient("b")
+		.secret(passwordEncoder().encode("b"))
 		.authorities("ROLE_C")
 		.scopes("all")
-		.authorizedGrantTypes("client_credentials");
-
-		//.authorizedGrantTypes("refresh_token", "password", "client_credentials");
+		.authorizedGrantTypes("refresh_token", "password", "client_credentials")
+		.accessTokenValiditySeconds(1200)
+		.refreshTokenValiditySeconds(240000);
 	}
 
 
