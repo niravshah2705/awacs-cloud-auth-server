@@ -75,7 +75,7 @@ jobs:
         # kubectl delete service clusterip authserver
         kubectl create deployment authserver --image=gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA --dry-run -o=yaml > deployment.yaml
         echo --- >> deployment.yaml # i am new to these things
-        kubectl create service clusterip authserver --tcp=9393:9393 --dry-run -o=yaml >> deployment.yaml
+        kubectl create service clusterip authserver --tcp=8100:8100 --dry-run -o=yaml >> deployment.yaml
         echo "-----------------------------------------------"
         kubectl apply -f deployment.yaml
         echo "-----------------------------------------------"
