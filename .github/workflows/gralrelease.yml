@@ -1,0 +1,33 @@
+name: Graal Native Image Release 
+on:
+  release: 
+    types: [created] 
+jobs:
+  build:
+    name: Build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix: 
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set up GraalVM
+        uses: DeLaGuardo/setup-graalvm@master
+        with:
+          graalvm-version: '20.2.0.java8'
+      - name: Generate Graal Native Image
+        run: |
+         java -version 
+         gu list 
+         gu install native-image 
+         mvn -B clean package
+         native-image -jar target/*.jar
+      - name: Upload package to download 
+        run: |
+         mkdir staging 
+         cp target/com*application staging
+         ls -lh staging 
+      - uses: actions/upload-artifact@v2
+        with:
+          name: NativeImagePackage_${{ matrix.os }}
+          path: staging
