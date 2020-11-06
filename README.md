@@ -9,15 +9,17 @@
 ## create a session by generating an access token (expires_in is in second) (authserver) - username: a / password: a
 
 ```
-giris@DESKTOP-45UA338 MINGW64 /d/aiocd-workspace/java-workspace/smart-pharmacy-product-service (master)                                                                     $ curl -X POST "http://localhost:8100/oauth/token?grant_type=client_credentials" -H "Authorization: Basic YTph"                                                             {"access_token":"c90d628a-4433-4a71-b8d8-db3d1b38fed3","token_type":"bearer","expires_in":43199,"scope":"all"}    
+curl -X POST "http://localhost:8100/oauth/token?grant_type=client_credentials" -H "Authorization: Basic YTph"                                                             
+
+{"access_token":"c90d628a-4433-4a71-b8d8-db3d1b38fed3","token_type":"bearer","expires_in":43199,"scope":"all"}    
 ```
 
 ## then accessing a resource (productservice)
 
-```
-$ curl -X GET -H "Authorization: Bearer c90d628a-4433-4a71-b8d8-db3d1b38fed3" http://localhost:8181/api/product/order/2                                                  {"id":2,"product":{"id":837,"name":"Brome Grass","price":"3065","distributorName":"Rath, Stroman and Kilback","genericName":"Brome Grass","companyName":"Nelco Laboratories, Inc."},"distributor":{"id":21,"stockistName":"Prohaska, Miller and Morissette","address":"52 Farmco Avenue","email":"pforthk@mediafire.com","productId":21,"availableQuantity":30},"pharmasist":{"id":1,"pharmasistName":"Calvin","pharmasistAddress":"Dinnies","email":"cdinnies0@redcross.org"},"creationDate":[2020,11,6,14,16,43],"quantity":30,"orderStatus":true}   
-```
+```curl -X GET -H "Authorization: Bearer c90d628a-4433-4a71-b8d8-db3d1b38fed3" http://localhost:8181/api/product/order/2  
 
+{"id":2,"product":{"id":837,"name":"Brome Grass","price":"3065","distributorName":"Rath, Stroman and Kilback","genericName":"Brome Grass","companyName":"Nelco Laboratories, Inc."},"distributor":{"id":21,"stockistName":"Prohaska, Miller and Morissette","address":"52 Farmco Avenue","email":"pforthk@mediafire.com","productId":21,"availableQuantity":30},"pharmasist":{"id":1,"pharmasistName":"Calvin","pharmasistAddress":"Dinnies","email":"cdinnies0@redcross.org"},"creationDate":[2020,11,6,14,16,43],"quantity":30,"orderStatus":true}   
+```
 
 ## In nutshell, product service internally calls again to authserver on /check_token this way to confirm the authenticity of a token being valid
 
