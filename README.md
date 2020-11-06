@@ -21,6 +21,17 @@ curl -X POST "http://localhost:8100/oauth/token?grant_type=client_credentials" -
 {"id":2,"product":{"id":837,"name":"Brome Grass","price":"3065","distributorName":"Rath, Stroman and Kilback","genericName":"Brome Grass","companyName":"Nelco Laboratories, Inc."},"distributor":{"id":21,"stockistName":"Prohaska, Miller and Morissette","address":"52 Farmco Avenue","email":"pforthk@mediafire.com","productId":21,"availableQuantity":30},"pharmasist":{"id":1,"pharmasistName":"Calvin","pharmasistAddress":"Dinnies","email":"cdinnies0@redcross.org"},"creationDate":[2020,11,6,14,16,43],"quantity":30,"orderStatus":true}   
 ```
 
+```
+mysql> select user_name, token_id , client_id from oauth_access_token;
++-----------+----------------------------------+-----------+
+| user_name | token_id                         | client_id |
++-----------+----------------------------------+-----------+
+| NULL      | 61b664271b52e5c6522486e20c969b4f | a         |
++-----------+----------------------------------+-----------+
+1 row in set (0.00 sec)
+
+```
+
 ## In nutshell, product service internally calls again to authserver on /check_token this way to confirm the authenticity of a token being valid
 
 ```
