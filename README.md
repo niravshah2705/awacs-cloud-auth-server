@@ -1,29 +1,39 @@
-# Read Me First
-The following was discovered as part of building this project:
+![Maven Build](https://github.com/girishaiocdawacs/awacs-cloud-auth-server/workflows/Maven%20Build/badge.svg)
+![Build and Deploy to GKE](https://github.com/girishaiocdawacs/awacs-cloud-auth-server/workflows/Build%20and%20Deploy%20to%20GKE/badge.svg)
 
-* The original package name 'com.aiocdwacs.awacs-cloud-auth-server' is invalid and this project uses 'com.aiocdwacs.awacscloudauthserver' instead.
+![Graal Native Image Release](https://github.com/girishaiocdawacs/awacs-cloud-auth-server/workflows/Graal%20Native%20Image%20Release/badge.svg)
 
-# Getting Started
 
-### Reference Documentation
-For further reference, please consider the following sections:
 
-* [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
-* [Spring Boot Maven Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/2.3.5.RELEASE/maven-plugin/reference/html/)
-* [Create an OCI image](https://docs.spring.io/spring-boot/docs/2.3.5.RELEASE/maven-plugin/reference/html/#build-image)
-* [Spring Web](https://docs.spring.io/spring-boot/docs/2.3.5.RELEASE/reference/htmlsingle/#boot-features-developing-web-applications)
-* [Spring Security](https://docs.spring.io/spring-boot/docs/2.3.5.RELEASE/reference/htmlsingle/#boot-features-security)
-* [OAuth2 Resource Server](https://docs.spring.io/spring-boot/docs/2.3.5.RELEASE/reference/htmlsingle/#boot-features-security-oauth2-server)
-* [Spring Data JPA](https://docs.spring.io/spring-boot/docs/2.3.5.RELEASE/reference/htmlsingle/#boot-features-jpa-and-spring-data)
 
-### Guides
-The following guides illustrate how to use some features concretely:
+## create a session by generating an access token (expires_in is in second) (authserver) - username: a / password: a
 
-* [Building a RESTful Web Service](https://spring.io/guides/gs/rest-service/)
-* [Serving Web Content with Spring MVC](https://spring.io/guides/gs/serving-web-content/)
-* [Building REST services with Spring](https://spring.io/guides/tutorials/bookmarks/)
-* [Securing a Web Application](https://spring.io/guides/gs/securing-web/)
-* [Spring Boot and OAuth2](https://spring.io/guides/tutorials/spring-boot-oauth2/)
-* [Authenticating a User with LDAP](https://spring.io/guides/gs/authenticating-ldap/)
-* [Accessing Data with JPA](https://spring.io/guides/gs/accessing-data-jpa/)
+```
+giris@DESKTOP-45UA338 MINGW64 /d/aiocd-workspace/java-workspace/smart-pharmacy-product-service (master)                                                                     $ curl -X POST "http://localhost:8100/oauth/token?grant_type=client_credentials" -H "Authorization: Basic YTph"                                                             {"access_token":"c90d628a-4433-4a71-b8d8-db3d1b38fed3","token_type":"bearer","expires_in":43199,"scope":"all"}    
+```
 
+## then accessing a resource (productservice)
+
+```
+$ curl -X GET -H "Authorization: Bearer c90d628a-4433-4a71-b8d8-db3d1b38fed3" http://localhost:8181/api/product/order/2                                                  {"id":2,"product":{"id":837,"name":"Brome Grass","price":"3065","distributorName":"Rath, Stroman and Kilback","genericName":"Brome Grass","companyName":"Nelco Laboratories, Inc."},"distributor":{"id":21,"stockistName":"Prohaska, Miller and Morissette","address":"52 Farmco Avenue","email":"pforthk@mediafire.com","productId":21,"availableQuantity":30},"pharmasist":{"id":1,"pharmasistName":"Calvin","pharmasistAddress":"Dinnies","email":"cdinnies0@redcross.org"},"creationDate":[2020,11,6,14,16,43],"quantity":30,"orderStatus":true}   
+```
+
+
+## In nutshell, product service internally calls again to authserver on /check_token this way to confirm the authenticity of a token being valid
+
+```
+curl -X POST -H "Authorization: Basic Yjpi" http://localhost:8100/oauth/check_token?token=c90d628a-4433-4a71-b8d8-db3d1b38fed3
+{
+    "scope": [
+        "all"
+    ],
+    "active": true,
+    "exp": 1604692423,
+    "authorities": [
+        "ROLE_TRUSTED_CLIENT",
+        "ROLE_A",
+        "ROLE_B"
+    ],
+    "client_id": "a"
+}
+```
