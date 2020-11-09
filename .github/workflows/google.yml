@@ -46,8 +46,7 @@ jobs:
         gcloud --quiet auth configure-docker
     # Get the GKE credentials so we can deploy to the cluster
     - run: |-
-       echo "Nothing to do here"
-        # gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE"
+        gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE"
     # Build the Docker image
     - name: Build
       run: |-
@@ -82,12 +81,12 @@ jobs:
         echo "-----------------------------------------------"
         cat deployment.yaml
         echo "-----------------------------------------------"
-        kubectl get all
+        # kubectl get all
         echo "-----------------------------------------------"
-        kubectl get services -o wide
+        # kubectl get services -o wide
         echo "-----------------------------------------------"
         # kubectl expose deployment authserver --type=LoadBalancer --name=usermgmt --port 9393
         echo "-------------------------------------------------"
-        kubectl get all
+        # kubectl get all
         echo "-------------------------------------------------"
-        
+      
