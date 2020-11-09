@@ -25,9 +25,9 @@ jobs:
       - name: Upload package to download 
         run: |
          mkdir staging 
-         cp target/com*application staging
+         cp target/${{ github.event.repository.name }}* staging
          ls -lh staging 
       - uses: actions/upload-artifact@v2
         with:
-          name: NativeImagePackage_${{ matrix.os }}
+          name: native_${{ github.event.repository.name }}_${{ matrix.os }}
           path: staging
