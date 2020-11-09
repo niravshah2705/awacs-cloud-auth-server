@@ -20,7 +20,7 @@ jobs:
          java -version 
          gu list 
          gu install native-image 
-         mvn -B clean package
+         mvn -B clean package -DskipTests=true
          native-image -jar target/*.jar
       - name: Upload package to download 
         run: |

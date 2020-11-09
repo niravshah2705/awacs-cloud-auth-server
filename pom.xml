@@ -16,7 +16,18 @@
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<start-class>
+			com.aiocdwacs.awacscloudauthserver.AwacsCloudAuthServerApplication
+		</start-class>
+		<maven.test.skip>true</maven.test.skip>
 		<java.version>8</java.version>
+		<sonar.projectKey>girishaiocdawacs_smart-pharmacy-product-service</sonar.projectKey>
+		<sonar.organization>girishaiocdawacs</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<spring-cloud.version>Hoxton.SR8</spring-cloud.version>
+		<spring-cloud-gcp.version>1.2.5.RELEASE</spring-cloud-gcp.version>
 	</properties>
 
 	<dependencies>
@@ -37,13 +48,16 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-gcp-starter-logging</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-
 
 		<dependency>
 			<groupId>mysql</groupId>
@@ -77,5 +91,99 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-gcp-dependencies</artifactId>
+				<version>${spring-cloud-gcp.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.google.cloud</groupId>
+				<artifactId>libraries-bom</artifactId>
+				<version>15.0.0</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	<distributionManagement>
+		<repository>
+			<id>github</id>
+			<name>GitHub Packages</name>
+			<url>https://maven.pkg.github.com/girishaiocdawacs/releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>github</id>
+			<name>GitHub Packages</name>
+			<url>https://maven.pkg.github.com/girishaiocdawacs/releases/</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<profiles>
+		<profile>
+			<id>graal</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.graalvm.nativeimage</groupId>
+						<artifactId>native-image-maven-plugin</artifactId>
+						<version>20.2.0</version>
+						<configuration>
+							<buildArgs>
+								-Dspring.graal.mode=initialization-only
+								-Dspring.graal.dump-config=classpath:computed-reflect-config.json
+								-Dspring.graal.verbose=true -Dspring.graal.skip-logback=true
+								--initialize-at-run-time=org.springframework.data.r2dbc.connectionfactory.ConnectionFactoryUtils
+								--initialize-at-build-time=io.r2dbc.spi.IsolationLevel,io.r2dbc.spi
+								--initialize-at-build-time=io.r2dbc.spi.ConstantPool,io.r2dbc.spi.Assert,io.r2dbc.spi.ValidationDepth
+								--initialize-at-build-time=org.springframework.data.r2dbc.connectionfactory
+								-H:+TraceClassInitialization --no-fallback
+								--allow-incomplete-classpath
+								--report-unsupported-elements-at-runtime
+								-H:+ReportExceptionStackTraces --no-server
+								--initialize-at-build-time=org.reactivestreams.Publisher
+								--initialize-at-build-time=com.example.reactive.ReservationRepository
+								--initialize-at-run-time=io.netty.channel.unix.Socket
+								--initialize-at-run-time=io.netty.channel.unix.IovArray
+								--initialize-at-run-time=io.netty.channel.epoll.EpollEventLoop
+								--initialize-at-run-time=io.netty.channel.unix.Errors
+							</buildArgs>
+						</configuration>
+						<executions>
+							<execution>
+								<goals>
+									<goal>native-image</goal>
+								</goals>
+								<phase>package</phase>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>com.google.cloud.tools</groupId>
+						<artifactId>appengine-maven-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+	<organization>
+		<name>aiocdawacs.com</name>
+		<url>aiocdawacs</url>
+	</organization>
 
 </project>
