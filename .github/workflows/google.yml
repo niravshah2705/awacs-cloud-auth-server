@@ -51,7 +51,7 @@ jobs:
     # Build the Docker image
     - name: Build
       run: |-
-        mvn -B clean package
+        mvn -B clean package -DskipTests=true
         ls -lrta target/
         docker build \
           --tag "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" \
