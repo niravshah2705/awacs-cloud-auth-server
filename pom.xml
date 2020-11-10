@@ -23,7 +23,7 @@
 		</start-class>
 		<maven.test.skip>true</maven.test.skip>
 		<java.version>8</java.version>
-		<sonar.projectKey>girishaiocdawacs_smart-pharmacy-product-service</sonar.projectKey>
+		<sonar.projectKey>girishaiocdawacs_awacs-cloud-auth-server</sonar.projectKey>
 		<sonar.organization>girishaiocdawacs</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<spring-cloud.version>Hoxton.SR9</spring-cloud.version>
