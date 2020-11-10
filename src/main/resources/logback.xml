@@ -5,14 +5,8 @@
 	<include resource="org/springframework/cloud/gcp/autoconfigure/logging/logback-appender.xml" />
  	<include resource="org/springframework/cloud/gcp/autoconfigure/logging/logback-json-appender.xml" />
 
-<!--     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <Pattern>
-                %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
-            </Pattern>
-        </layout>
-    </appender>
- -->	
+	<property name="projectId" value="awacs-cloud-dev"/>
+ 	
     <logger name="com.aiocdawacs" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="STACKDRIVER"/>
@@ -22,5 +16,14 @@
 		<appender-ref ref="CONSOLE" />
 		<appender-ref ref="STACKDRIVER" />
 	</root>
-
+	
+<!-- 	
+  <appender name="CONSOLE_JSON" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+      <layout class="org.springframework.cloud.gcp.logging.StackdriverJsonLayout">
+        <projectId>${projectId}</projectId>
+      </layout>
+    </encoder>
+  </appender>
+ -->
 </configuration>
