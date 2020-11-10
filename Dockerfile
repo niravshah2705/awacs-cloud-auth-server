@@ -1,8 +1,10 @@
-FROM openjdk:8-jdk-alpine
-WORKDIR /app
+FROM openjdk:13-jdk-alpine
 ARG JAR_FILE=target/*.jar
+WORKDIR /
+COPY . /
 COPY ${JAR_FILE} app.jar
-ADD Dockerfile.key /app/keys.txt
-RUN base64 -d /app/keys.txt > /app/keys.json
-ENV GOOGLE_APPLICATION_CREDENTIALS="/app/keys.json"
+ADD Dockerfile.key /keys.txt
+RUN base64 -d /keys.txt > /keys.json
+ENV GOOGLE_APPLICATION_CREDENTIALS="/keys.json"
+
 ENTRYPOINT ["java","-jar","/app.jar"]
