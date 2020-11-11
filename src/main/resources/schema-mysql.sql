@@ -1,8 +1,6 @@
 SET sql_mode = '';
 
-drop database AWACS_CLOUD_AUTH_SERVER;
-create database AWACS_CLOUD_AUTH_SERVER;
-use AWACS_CLOUD_AUTH_SERVER;
+use awacs_cloud;
 
 create table if not exists  oauth_client_details (
   client_id varchar(255) not null,
