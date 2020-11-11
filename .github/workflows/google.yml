@@ -73,20 +73,18 @@ jobs:
         #./kustomize build . | kubectl apply -f -
         # kubectl rollout status deployment/$DEPLOYMENT_NAME
         # kubectl delete service clusterip authserver
-        kubectl create deployment authserver --image=gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA --dry-run -o=yaml > deployment.yaml
+        kubectl create deployment authserver --image=gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA --dry-run -o=yaml > authserver.yaml
         echo --- >> deployment.yaml # i am new to these things
-        kubectl create service clusterip authserver --tcp=8100:8100 --dry-run -o=yaml >> deployment.yaml
+        kubectl create service clusterip authserver --tcp=8100:8100 --dry-run -o=yaml >> authserver.yaml
         echo "-----------------------------------------------"
-        kubectl apply -f deployment.yaml
+        kubectl apply -f authserver.yaml
         echo "-----------------------------------------------"
-        cat deployment.yaml
+        cat authserver.yaml
         echo "-----------------------------------------------"
         # kubectl get all
         echo "-----------------------------------------------"
         # kubectl get services -o wide
         echo "-----------------------------------------------"
-        # kubectl expose deployment authserver --type=LoadBalancer --name=usermgmt --port 9393
-        echo "-------------------------------------------------"
         # kubectl get all
         echo "-------------------------------------------------"
       
