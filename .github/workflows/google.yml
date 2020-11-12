@@ -54,13 +54,13 @@ jobs:
         ls -lrta target/
         docker build \
           --tag "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" \
-	  --tag "gcr.io/$PROJECT_ID/$IMAGE:latest"
+          --tag "gcr.io/$PROJECT_ID/$IMAGE:latest" \
           --build-arg GITHUB_SHA="$GITHUB_SHA" \
           --build-arg GITHUB_REF="$GITHUB_REF" \
           .
-	echo "confirming latest lag points to a baked image -"
-	docker image ls "gcr.io/$PROJECT_ID/$IMAGE:latest"
-
+        echo "confirming latest lag points to a baked image -"
+        docker image ls "gcr.io/$PROJECT_ID/$IMAGE:latest"
+  
     # Push the Docker image to Google Container Registry
     - name: Publish
       run: |-
