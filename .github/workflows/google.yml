@@ -54,9 +54,13 @@ jobs:
         ls -lrta target/
         docker build \
           --tag "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" \
+	  --tag "gcr.io/$PROJECT_ID/$IMAGE:latest"
           --build-arg GITHUB_SHA="$GITHUB_SHA" \
           --build-arg GITHUB_REF="$GITHUB_REF" \
           .
+	echo "confirming latest lag points to a baked image -"
+	docker image ls "gcr.io/$PROJECT_ID/$IMAGE:latest"
+
     # Push the Docker image to Google Container Registry
     - name: Publish
       run: |-
@@ -73,7 +77,15 @@ jobs:
         #./kustomize build . | kubectl apply -f -
         # kubectl rollout status deployment/$DEPLOYMENT_NAME
         # kubectl delete service clusterip authserver
-        kubectl create deployment authserver --image=gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA --dry-run -o=yaml > authserver.yaml
+        kubectl create deployment db --image=mysql --dry-run -o=yaml > db.yaml
+        echo "---" >> db.yaml # i am new to these things
+        kubectl create service clusterip db --tcp=3306:3306 --dry-run -o=yaml >> db.yaml
+        kubectl apply -f db.yml
+	echo "-----------------------db.yml------------------------"
+	cat db.yml
+	echo "-----------------------------------------------------"
+	
+	kubectl create deployment authserver --image=gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA --dry-run -o=yaml > authserver.yaml
         echo "---" >> authserver.yaml # i am new to these things
         kubectl create service clusterip authserver --tcp=8100:8100 --dry-run -o=yaml >> authserver.yaml
         echo "-----------------------------------------------"
@@ -81,7 +93,11 @@ jobs:
         echo "-----------------------------------------------"
         cat authserver.yaml
         echo "-----------------------------------------------"
+	kubectl expose service authserver --ingress app.aiocdawacs.com --tls-acme
+	kubectl create ingress authserver --host app.aiocdawacs.com --tls-acme
+
         # kubectl get all
+        # kubectl delete rs --all
         echo "-----------------------------------------------"
         # kubectl get services -o wide
         echo "-----------------------------------------------"
