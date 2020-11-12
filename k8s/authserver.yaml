@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: authserver
+  name: authserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: authserver
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: authserver
+    spec:
+      containers:
+      - image: gcr.io/awacs-cloud-prod/awacs-cloud-auth-server
+        name: awacs-cloud-auth-server
+        resources: {}
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: authserver
+  name: authserver
+spec:
+  ports:
+  - name: 8100-8100
+    port: 8100
+    protocol: TCP
+    targetPort: 8100
+  selector:
+    app: authserver
+  type: ClusterIP
+status:
+  loadBalancer: {}
