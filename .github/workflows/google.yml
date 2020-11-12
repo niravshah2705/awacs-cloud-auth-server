@@ -59,7 +59,7 @@ jobs:
           .
         docker tag $IMAGE:$GITHUB_SHA gcr.io/$PROJECT_ID/$IMAGE:latest
         echo "confirming latest lag points to a baked image"
-  	gcloud container images list-tags gcr.io/$PROJECT_ID/$IMAGE
+        gcloud container images list-tags gcr.io/$PROJECT_ID/$IMAGE
     # Push the Docker image to Google Container Registry
     - name: Publish
       run: |-
@@ -92,4 +92,4 @@ jobs:
         echo "-----------------------------------------------"
         # kubectl get all
         echo "-------------------------------------------------"
-     
+   
