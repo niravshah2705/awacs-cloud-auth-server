@@ -81,20 +81,19 @@ jobs:
         echo "---" >> db.yaml # i am new to these things
         kubectl create service clusterip db --tcp=3306:3306 --dry-run -o=yaml >> db.yaml
         kubectl apply -f db.yml
-	echo "-----------------------db.yml------------------------"
-	cat db.yml
-	echo "-----------------------------------------------------"
-	
-	kubectl create deployment authserver --image=gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA --dry-run -o=yaml > authserver.yaml
-        echo "---" >> authserver.yaml # i am new to these things
+        echo "-----------------------db.yml------------------------"
+        cat db.yml
+        echo "-----------------------------------------------------"
+        kubectl create deployment authserver --image=gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA --dry-run -o=yaml > authserver.yaml
+        echo "---" >> authserver.yaml
         kubectl create service clusterip authserver --tcp=8100:8100 --dry-run -o=yaml >> authserver.yaml
         echo "-----------------------------------------------"
         kubectl apply -f authserver.yaml
         echo "-----------------------------------------------"
         cat authserver.yaml
         echo "-----------------------------------------------"
-	kubectl expose service authserver --ingress app.aiocdawacs.com --tls-acme
-	kubectl create ingress authserver --host app.aiocdawacs.com --tls-acme
+        kubectl expose service authserver --ingress app.aiocdawacs.com --tls-acme
+        kubectl create ingress authserver --host app.aiocdawacs.com --tls-acme
 
         # kubectl get all
         # kubectl delete rs --all
@@ -103,4 +102,4 @@ jobs:
         echo "-----------------------------------------------"
         # kubectl get all
         echo "-------------------------------------------------"
-      
+     
