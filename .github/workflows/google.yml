@@ -49,8 +49,11 @@ jobs:
         gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE"
     # Build the Docker image
     - name: Build
+      env: 
+          GITHUB_USERNAME: ${{ github.actor }}
+          GITHUB_TOKEN : ${{ secrets.GITHUB_TOKEN }} 
       run: |-
-        mvn -B clean package -DskipTests=true
+        mvn --settings settings.xml -B clean package -DskipTests=true
         ls -lrta target/
         docker build \
           --tag "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" \

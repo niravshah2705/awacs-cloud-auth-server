@@ -16,11 +16,14 @@ jobs:
         with:
           graalvm-version: '20.2.0.java8'
       - name: Generate Graal Native Image
+        env: 
+          GITHUB_USERNAME: ${{ github.actor }}
+          GITHUB_TOKEN : ${{ secrets.GITHUB_TOKEN }}
         run: |
          java -version 
          gu list 
          gu install native-image 
-         mvn -B clean package -DskipTests=true
+         mvn --settings settings.xml -B clean package -DskipTests=true
          native-image -jar target/*.jar
       - name: Upload package to download 
         run: |
