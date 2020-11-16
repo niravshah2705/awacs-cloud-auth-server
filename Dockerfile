@@ -8,4 +8,4 @@ RUN base64 -d /keys.txt > /keys.json
 ENV GOOGLE_APPLICATION_CREDENTIALS="/keys.json"
 ENV SPRING_PROFILES_ACTIVE=prod
 EXPOSE 8100
-ENTRYPOINT ["java","-jar","/app.jar"]
+ENTRYPOINT ["java","-Dspring.profiles.active=prod", "-jar","/app.jar"]
