@@ -1,0 +1,12 @@
+---
+apiVersion: "extensions/v1beta1"
+kind: "Ingress"
+metadata:
+  name: "adminer-ingress"
+  namespace: "default"
+spec:
+  backend:
+    serviceName: "adminer"
+    servicePort: 8080
+  tls:
+  - secretName: "app.awacscloud.tech"
