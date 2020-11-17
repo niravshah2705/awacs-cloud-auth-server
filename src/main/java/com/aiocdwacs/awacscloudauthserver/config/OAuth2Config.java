@@ -51,10 +51,10 @@ public class OAuth2Config extends AuthorizationServerConfigurerAdapter {
 		security.checkTokenAccess("hasAuthority('ROLE_C')"); //secure the oauth/check_token endpoint
 	}
 
-	@Bean
-	public TokenStore tokenStore() {
-		return new InMemoryTokenStore();
-	}
+//	@Bean
+//	public TokenStore tokenStore() {
+//		return new InMemoryTokenStore();
+//	}
 
 	@Bean
 	public PasswordEncoder passwordEncoder(){
