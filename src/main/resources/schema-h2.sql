@@ -81,11 +81,11 @@ create table oauth_access_token (
 create table oauth_refresh_token (
   token_id VARCHAR(256),
   token VARCHAR(3255),
-  authentication VARCHAR(255)
+  authentication VARCHAR(4000)
 );
 
 create table oauth_code (
-  code VARCHAR(256), authentication VARCHAR(255)
+  code VARCHAR(256), authentication VARCHAR(4000)
 );
 
 create table oauth_approvals (
