@@ -28,6 +28,7 @@
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<spring-cloud.version>Hoxton.SR9</spring-cloud.version>
 		<spring-cloud-gcp.version>1.2.6.RELEASE</spring-cloud-gcp.version>
+		<awacs-commons-version>1.0.15</awacs-commons-version>
 	</properties>
 
 	<dependencies>
@@ -76,13 +77,13 @@
 		<dependency>
 		  <groupId>com.aiocdawacs</groupId>
 		  <artifactId>cloud-event-publisher-gcp-pubsub</artifactId>
-		  <version>1.0.14</version>
+		  <version>${awacs-commons-version}</version>
 		</dependency>
 		
 		<dependency>
 		  <groupId>com.aiocdawacs</groupId>
 		  <artifactId>awacs-commons-web</artifactId>
-		  <version>1.0.14</version>
+		  <version>${awacs-commons-version}</version>
 		</dependency>
 		
 		<dependency>

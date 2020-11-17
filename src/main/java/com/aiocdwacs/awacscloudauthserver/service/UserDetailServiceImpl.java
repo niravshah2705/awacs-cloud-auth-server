@@ -29,7 +29,11 @@ public class UserDetailServiceImpl implements UserDetailsService {
         UserDetails userDetails = new AuthUserDetail(optionalUser.get());
         new AccountStatusUserDetailsChecker().check(userDetails);
         return userDetails;
-
-
     }
+
+	public UserDetailServiceImpl() {
+		super();
+	}
+    
+    
 }
