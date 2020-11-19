@@ -14,7 +14,7 @@ jobs:
       - name: Set up GraalVM
         uses: DeLaGuardo/setup-graalvm@master
         with:
-          graalvm-version: '20.2.0.java8'
+          graalvm-version: '20.3.0.java8'
       - name: Generate Graal Native Image
         env: 
           GITHUB_USERNAME: ${{ github.actor }}
