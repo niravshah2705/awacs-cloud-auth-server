@@ -13,4 +13,7 @@ services:
       MYSQL_ROOT_PASSWORD: secret
     deploy:
       mode: replicated
-      replicas: 2
+      replicas:  1
+    volumes: 
+      - ../db/:/docker-entrypoint-initdb.d/
+      

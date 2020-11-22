@@ -3,6 +3,7 @@ package com.aiocdwacs.awacscloudauthserver.model;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,6 +15,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+
 @Entity
 @Table(name = "role")
 public class Role implements Serializable {
@@ -24,7 +26,7 @@ public class Role implements Serializable {
 	@Column(name = "name")
 	private String name;
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "permission_role", joinColumns = {
 			@JoinColumn(name = "role_id", referencedColumnName = "id")}, inverseJoinColumns = {
 					@JoinColumn(name = "permission_id", referencedColumnName = "id")})

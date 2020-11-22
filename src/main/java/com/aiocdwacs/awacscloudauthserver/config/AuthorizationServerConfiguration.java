@@ -42,13 +42,12 @@ public class AuthorizationServerConfiguration implements AuthorizationServerConf
 
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		clients.jdbc(dataSource).passwordEncoder(passwordEncoder);
-
+		clients.jdbc(dataSource).passwordEncoder(passwordEncoder).withClient("b");
 	}
 
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-		endpoints.tokenStore(jdbcTokenStore());
+		endpoints.tokenStore(jdbcTokenStore()).approvalStoreDisabled(); 	//duplicate
 	}
 	
 	@EventListener

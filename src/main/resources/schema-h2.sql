@@ -13,6 +13,7 @@ create table oauth_client_details (
   primary key (client_id)
 );
 
+
 create table permission (
   id int(11) not null auto_increment,
   name varchar(512) default null,

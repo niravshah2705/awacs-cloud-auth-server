@@ -1,7 +1,3 @@
-SET sql_mode = '';
-
-use awacs_cloud;
-
 create table if not exists  oauth_client_details (
   client_id varchar(255) not null,
   client_secret varchar(255) not null,
@@ -31,18 +27,17 @@ create table if not exists role (
   unique key name (name)
 ) engine=innodb ;
 
-create table if not exists  user (
-  id int(11) not null auto_increment,
-  username varchar(100) not null,
-  password varchar(1024) not null,
-  email varchar(1024) not null,
-  enabled tinyint(4) not null,
-  accountNonExpired tinyint(4) not null,
-  credentialsNonExpired tinyint(4) not null,
-  accountNonLocked tinyint(4) not null,
-  primary key (id),
-  unique key username (username)
-) engine=innodb ;
+CREATE TABLE if not exists `users` (
+  `id` int NOT NULL,
+  `account_non_expired` bit(1) DEFAULT NULL,
+  `account_non_locked` bit(1) DEFAULT NULL,
+  `credentials_non_expired` bit(1) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `enabled` bit(1) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `username` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
 create table  if not exists permission_role (
@@ -62,7 +57,7 @@ create table if not exists role_user (
   key role_id (role_id),
   key user_id (user_id),
   constraint role_user_ibfk_1 foreign key (role_id) references role (id),
-  constraint role_user_ibfk_2 foreign key (user_id) references user (id)
+  constraint role_user_ibfk_2 foreign key (user_id) references users (id)
 ) engine=innodb ;
 
 -- token store
@@ -102,10 +97,3 @@ create table if not exists oauth_approvals (
 	expiresAt TIMESTAMP,
 	lastModifiedAt TIMESTAMP
 );
-
-
-
-
-
-
-
