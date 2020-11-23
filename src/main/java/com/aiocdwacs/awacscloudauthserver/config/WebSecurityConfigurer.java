@@ -3,32 +3,24 @@ package com.aiocdwacs.awacscloudauthserver.config;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
+import com.aiocdwacs.awacscloudauthserver.service.UserDetailServiceImpl;
 
 @Configuration
+@EnableWebSecurity
 public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private DataSource dataSource;
-
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
-
-	@Override
-	@Bean
-	public AuthenticationManager authenticationManagerBean() throws Exception {
-		return super.authenticationManagerBean();
-	}
+	
+	@Autowired
+	UserDetailServiceImpl userDetailsService;
+ 	
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -38,8 +30,8 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 		http.csrf().disable();	// i know what I am doing. until
 		http
 		.authorizeRequests()
-		.antMatchers("/api/user/").hasAnyRole("ROLE_A","ROLE_B","ROLE_C")
-		.antMatchers("/").hasRole("Chief")
+		.antMatchers("/api/user/").hasAnyRole("BOARD","API_ACCESS", "TRUSTED_CLIENT")
+		.antMatchers("/oauth/check_token").hasRole("TRUSTED_CLIENT")
 		.antMatchers("/").permitAll()
 		.antMatchers("/swagger**").permitAll()
 		.antMatchers("/actuator**").permitAll();
@@ -50,13 +42,6 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 		auth
 		.jdbcAuthentication()
 		.dataSource(dataSource)
-		.passwordEncoder(passwordEncoder())
-		.usersByUsernameQuery( "SELECT username, password, enabled from user where username = ?");
-	}
-
-	@Override
-	@Bean
-	public UserDetailsService userDetailsServiceBean() throws Exception {
-		return super.userDetailsServiceBean();
+		.usersByUsernameQuery("SELECT username, password, enabled from users where username = ?");
 	}
 }

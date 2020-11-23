@@ -1,8 +1,9 @@
 package com.aiocdwacs.awacscloudauthserver;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,20 +36,23 @@ public class RegisterController {
 		User user = new User();
 		user.setEnabled(Boolean.TRUE);
 		user.setPassword(encodedPassword);
-		
-		Optional<User> dbUser =  userRepository.findByUsername(userToCreate.getUsername());
-		if(dbUser.isPresent()) {
-			ResponseEntity.ok().body(String.format("user already exist (username: %s with email: %s)", dbUser.get().getUsername(), dbUser.get().getEmail()));
+
+		User userFromDatabase =  userRepository.findByUsername(userToCreate.getUsername());
+		if(Objects.nonNull(userFromDatabase)) {
+			ResponseEntity.ok().body(String.format("user already exist (username: %s with email: %s)", userFromDatabase.getUsername(), userFromDatabase.getEmail()));
 		}
+
 		user.setUsername(userToCreate.getUsername());
 		user.setEmail(userToCreate.getEmail());
+		user.setCreated(LocalDateTime.now()); // mysql unable to auto manage column default CURRENT_TIMESTAMP so doing it manually
+		user.setUpdated(LocalDateTime.now()); // mysql unable to auto manage column on update CURRENT_TIMESTAMP so doing it manually
 
 		Role userRole = new Role();
-		List<Permission> defaultPermissions = Arrays.asList(new Permission("ROLE_API_ACCESS"));		
+		List<Permission> defaultPermissions = Arrays.asList(new Permission("ROLE_API_ACCESS"),new Permission("ROLE_TRUSTED_CLIENT"));		
 
 		userRole.setPermissions(defaultPermissions);
 		user.setRoles(Arrays.asList(userRole));
-		
+
 		return ResponseEntity.ok(userRepository.save(user));
 	}
 }

@@ -7,7 +7,6 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 
 import com.aiocdawacs.cloud.stream.config.EnableAwacsEventPublisherModule;
 import com.aiocdawacs.cloud.stream.model.CloudEvent;
@@ -18,7 +17,6 @@ import com.aiocdawacs.cloud.stream.service.CloudEventNameConstants;
 import com.aiocdawacs.cloud.stream.service.CloudEventPublisherService;
 
 @SpringBootApplication
-@EnableAuthorizationServer
 @EnableScheduling
 @EnableAwacsEventPublisherModule
 public class AwacsCloudAuthServerApplication {
