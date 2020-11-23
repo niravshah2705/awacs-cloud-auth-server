@@ -1,6 +1,7 @@
 package com.aiocdwacs.awacscloudauthserver.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -20,11 +21,19 @@ import javax.persistence.Table;
 @Table(name = "role")
 public class Role implements Serializable {
 
+	private static final long serialVersionUID = -4973310208144829624L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 	@Column(name = "name")
 	private String name;
+
+    @Column(name = "created")
+    private LocalDateTime created;
+
+    @Column(name = "updated")
+    private LocalDateTime updated;
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "permission_role", joinColumns = {
@@ -59,5 +68,21 @@ public class Role implements Serializable {
 
 	public void setPermissions(List<Permission> permissions) {
 		this.permissions = permissions;
+	}
+
+	public LocalDateTime getCreated() {
+		return created;
+	}
+
+	public void setCreated(LocalDateTime created) {
+		this.created = created;
+	}
+
+	public LocalDateTime getUpdated() {
+		return updated;
+	}
+
+	public void setUpdated(LocalDateTime updated) {
+		this.updated = updated;
 	}
 }

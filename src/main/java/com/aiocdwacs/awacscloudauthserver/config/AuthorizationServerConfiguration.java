@@ -37,14 +37,27 @@ public class AuthorizationServerConfiguration implements AuthorizationServerConf
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
 		security.checkTokenAccess("isAuthenticated()").tokenKeyAccess("permitAll()");
-
 	}
 
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		clients.jdbc(dataSource).passwordEncoder(passwordEncoder).withClient("b");
+		clients.jdbc(dataSource)
+		.withClient("neo")
+		.secret(passwordEncoder.encode("neo"))
+		.authorities("ROLE_SCRUM","ROLE_BOARD","ROLE_API_ACCESS", "ROLE_TRUSTED_CLIENT")
+		.scopes("all")
+		.authorizedGrantTypes("client_credentials")
+		.and()
+		.withClient("bluesky")
+		.secret(passwordEncoder.encode("bluesky"))
+		.authorities("ROLE_API_ACCESS")
+		.scopes("all", "read", "write")
+		.authorizedGrantTypes("refresh_token", "password", "client_credentials")
+		.accessTokenValiditySeconds(3600)
+		.refreshTokenValiditySeconds(240000)
+		.and().build();
 	}
-
+	
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 		endpoints.tokenStore(jdbcTokenStore()).approvalStoreDisabled(); 	//duplicate

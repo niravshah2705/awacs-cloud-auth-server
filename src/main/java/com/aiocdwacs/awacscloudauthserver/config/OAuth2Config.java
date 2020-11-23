@@ -9,7 +9,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
@@ -31,28 +30,6 @@ public class OAuth2Config extends AuthorizationServerConfigurerAdapter {
 
 
 	@Override
-	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		clients.jdbc(dataSource)
-		.withClient("neo")//client username: a
-		.secret(passwordEncoder().encode("neo"))//password: a
-		.authorities("ROLE_SCRUM","ROLE_BOARD","ROLE_API_ACCESS", "ROLE_TRUSTED_CLIENT")
-		.scopes("all")
-		.authorizedGrantTypes("client_credentials")
-		
-		
-		.and()
-		
-		.withClient("bluesky")
-		.secret(passwordEncoder().encode("bluesky"))
-		.authorities("ROLE_API_ACCESS")
-		.scopes("all", "read", "write")
-		.authorizedGrantTypes("refresh_token", "password", "client_credentials")
-		.accessTokenValiditySeconds(3600)
-		.refreshTokenValiditySeconds(240000);
-	}
-
-
-	@Override
 	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
 		security.checkTokenAccess("hasAuthority('ROLE_API_ACCESS')");
 	}
@@ -64,7 +41,7 @@ public class OAuth2Config extends AuthorizationServerConfigurerAdapter {
 
 	@Bean
 	public PasswordEncoder passwordEncoder(){
-		return new BCryptPasswordEncoder(4);
+		return new BCryptPasswordEncoder(16);
 	}
 
 	@Override

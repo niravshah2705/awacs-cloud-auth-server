@@ -1,99 +1,161 @@
-create table if not exists  oauth_client_details (
-  client_id varchar(255) not null,
-  client_secret varchar(255) not null,
-  web_server_redirect_uri varchar(2048) default null,
-  scope varchar(255) default null,
-  access_token_validity int(11) default null,
-  refresh_token_validity int(11) default null,
-  resource_ids varchar(1024) default null,
-  authorized_grant_types varchar(1024) default null,
-  authorities varchar(1024) default null,
-  additional_information varchar(4096) default null,
-  autoapprove varchar(255) default null,
-  primary key (client_id)
-) engine=innodb ;
+drop database awacs_cloud;
+create database awacs_cloud;
+use awacs_cloud;
 
-create table if not exists  permission (
-  id int(11) not null auto_increment,
-  name varchar(512) default null,
-  primary key (id),
-  unique key name (name)
-) engine=innodb ;
+drop table if exists oauth_client_details;
+create table oauth_client_details (
+  client_id varchar(255) primary key, 
+  resource_ids varchar(255), 
+  client_secret varchar(255), 
+  scope varchar(255), 
+  authorized_grant_types varchar(255), 
+  web_server_redirect_uri varchar(255), 
+  authorities varchar(255), 
+  access_token_validity integer, 
+  refresh_token_validity integer, 
+  additional_information varchar(4096), 
+  autoapprove varchar(255),
+  created timestamp default CURRENT_TIMESTAMP,
+  updated timestamp default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP 
+);
+drop table if exists oauth_client_token;
+create table oauth_client_token (
+  token_id varchar(255), 
+  token long varbinary, 
+  authentication_id varchar(255) primary key, 
+  user_name varchar(255), 
+  client_id varchar(255),
+  created timestamp default CURRENT_TIMESTAMP,
+  updated timestamp default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP 
+);
+drop table if exists oauth_access_token;
+create table oauth_access_token (
+  token_id varchar(255), 
+  token long varbinary, 
+  authentication_id varchar(255) primary key, 
+  user_name varchar(255), 
+  client_id varchar(255), 
+  authentication long varbinary, 
+  refresh_token varchar(255),
+  created timestamp default CURRENT_TIMESTAMP,
+  updated timestamp default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP 
+);
+drop table if exists oauth_refresh_token;
+create table oauth_refresh_token (
+  token_id varchar(255), 
+  token long varbinary, 
+  authentication long varbinary,
+  created timestamp default CURRENT_TIMESTAMP,
+  updated timestamp default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP 
+);
 
-create table if not exists role (
-  id int(11) not null auto_increment,
+drop table if exists users;
+create table users (
+  id int not null,
+  account_non_expired bit(1) default null,
+  account_non_locked bit(1) default null,
+  credentials_non_expired bit(1) default null,
+  email varchar(255) default null,
+  enabled bit(1) default null,
+  password varchar(255) default null,
+  username varchar(255) default null,
+  created timestamp default CURRENT_TIMESTAMP,
+  updated timestamp default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  primary key (id)
+);
+
+ALTER TABLE users ADD INDEX (username);
+ALTER TABLE users ADD INDEX (email);
+
+
+drop table if exists oauth_code;
+create table oauth_code (
+  code varchar(255), 
+  authentication long varbinary,
+  created timestamp default CURRENT_TIMESTAMP,
+  updated timestamp default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP 
+);
+
+drop table if exists oauth_approvals;
+create table oauth_approvals (
+  userid varchar(255), 
+  clientid varchar(255), 
+  scope varchar(255), 
+  status varchar(10), 
+  expiresat timestamp, 
+  lastmodifiedat timestamp,
+  created timestamp default CURRENT_TIMESTAMP,
+  updated timestamp default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP 
+);
+
+drop table if exists clientdetails;
+
+create table clientdetails (
+  appid varchar(255) primary key, 
+  resourceids varchar(255), 
+  appsecret varchar(255), 
+  scope varchar(255), 
+  granttypes varchar(255), 
+  redirecturl varchar(255), 
+  authorities varchar(255), 
+  access_token_validity integer, 
+  refresh_token_validity integer, 
+  additionalinformation varchar(4096), 
+  autoapprovescopes varchar(255),
+  created timestamp default CURRENT_TIMESTAMP,
+  updated timestamp default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP 
+);
+
+drop table if exists permission;
+
+create table permission (
+  id int not null,
   name varchar(255) default null,
-  primary key (id),
-  unique key name (name)
-) engine=innodb ;
-
-CREATE TABLE if not exists `users` (
-  `id` int NOT NULL,
-  `account_non_expired` bit(1) DEFAULT NULL,
-  `account_non_locked` bit(1) DEFAULT NULL,
-  `credentials_non_expired` bit(1) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `enabled` bit(1) DEFAULT NULL,
-  `password` varchar(255) DEFAULT NULL,
-  `username` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-
-create table  if not exists permission_role (
-  permission_id int(11) default null,
-  role_id int(11) default null,
-  key permission_id (permission_id),
-  key role_id (role_id),
-  constraint permission_role_ibfk_1 foreign key (permission_id) references permission (id),
-  constraint permission_role_ibfk_2 foreign key (role_id) references role (id)
-) engine=innodb ;
-
-
-
-create table if not exists role_user (
-  role_id int(11) default null,
-  user_id int(11) default null,
-  key role_id (role_id),
-  key user_id (user_id),
-  constraint role_user_ibfk_1 foreign key (role_id) references role (id),
-  constraint role_user_ibfk_2 foreign key (user_id) references users (id)
-) engine=innodb ;
-
--- token store
-create table if not exists oauth_client_token (
-  token_id VARCHAR(256),
-  token LONG VARBINARY,
-  authentication_id VARCHAR(256) PRIMARY KEY,
-  user_name VARCHAR(256),
-  client_id VARCHAR(256)
+  created timestamp default CURRENT_TIMESTAMP,
+  updated timestamp default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, 	
+  primary key (id)
 );
 
-create table if not exists oauth_access_token (
-  token_id VARCHAR(256),
-  token LONG VARBINARY,
-  authentication_id VARCHAR(256) PRIMARY KEY,
-  user_name VARCHAR(256),
-  client_id VARCHAR(256),
-  authentication LONG VARBINARY,
-  refresh_token VARCHAR(256)
+
+
+drop table if exists role;
+create table role (
+  id int not null,
+  name varchar(255) default null,
+  created timestamp default CURRENT_TIMESTAMP,
+  updated timestamp default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, 
+  primary key (id)
 );
 
-create table if not exists oauth_refresh_token (
-  token_id VARCHAR(256),
-  token LONG VARBINARY,
-  authentication LONG VARBINARY
+drop table if exists role_user;
+
+create table role_user (
+  user_id int not null,
+  role_id int not null,
+  created timestamp default CURRENT_TIMESTAMP,
+  updated timestamp default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, 
+  key (role_id),
+  key (user_id),
+  constraint foreign key (user_id) references users (id),
+  constraint foreign key (role_id) references role (id)
 );
 
-create table if not exists oauth_code (
-  code VARCHAR(256), authentication LONG VARBINARY
+drop table if exists permission_role;
+ create table permission_role (
+  role_id int not null,
+  permission_id int not null,
+  created timestamp default CURRENT_TIMESTAMP,
+  updated timestamp default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  key (permission_id),
+  key (role_id),
+  constraint foreign key (permission_id) references permission (id),
+  constraint foreign key (role_id) references role (id)
 );
 
-create table if not exists oauth_approvals (
-	userId VARCHAR(256),
-	clientId VARCHAR(256),
-	scope VARCHAR(256),
-	status VARCHAR(10),
-	expiresAt TIMESTAMP,
-	lastModifiedAt TIMESTAMP
-);
+
+
+drop table if exists hibernate_sequence;
+
+create table hibernate_sequence (next_val bigint);
+
+insert into hibernate_sequence values (1);

@@ -1,7 +1,7 @@
 package com.aiocdwacs.awacscloudauthserver.model;
 
-
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -23,47 +23,49 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public User() {
-    }
+	}
 
-    public User(User user) {
-        this.username = user.getUsername();
-        this.password = user.getPassword();
-        this.email = user.getEmail();
-        this.enabled = user.isEnabled();
-        this.accountNonExpired = user.isAccountNonExpired();
-        this.credentialsNonExpired = user.isCredentialsNonExpired();
-        this.accountNonLocked = user.isAccountNonLocked();
-        this.roles = user.getRoles();
-    }
+	public User(User user) {
+		this.username = user.getUsername();
+		this.password = user.getPassword();
+		this.email = user.getEmail();
+		this.enabled = user.isEnabled();
+		this.accountNonExpired = user.isAccountNonExpired();
+		this.credentialsNonExpired = user.isCredentialsNonExpired();
+		this.accountNonLocked = user.isAccountNonLocked();
+		this.roles = user.getRoles();
+	}
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer id;
 
-    @Column(name = "username")
-    private String username;
-    @Column(name = "password")
-    private String password;
-    @Column(name = "email")
-    private String email;
-    @Column(name = "enabled")
-    private boolean enabled;
-    @Column(name = "accountNonExpired")
-    private boolean accountNonExpired;
-    @Column(name = "credentialsNonExpired")
-    private boolean credentialsNonExpired;
-    @Column(name = "accountNonLocked")
-    private boolean accountNonLocked;
+	@Column(name = "username")
+	private String username;
+	@Column(name = "password")
+	private String password;
+	@Column(name = "email")
+	private String email;
+	@Column(name = "enabled")
+	private boolean enabled;
+	@Column(name = "accountNonExpired")
+	private boolean accountNonExpired;
+	@Column(name = "credentialsNonExpired")
+	private boolean credentialsNonExpired;
+	@Column(name = "accountNonLocked")
+	private boolean accountNonLocked;
 
+	@Column(name = "created")
+	private LocalDateTime created;
 
-    
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "role_user", joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-            inverseJoinColumns = {
-                    @JoinColumn(name = "role_id", referencedColumnName = "id")})
-    private List<Role> roles;
+	@Column(name = "updated")
+	private LocalDateTime updated;
 
-
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinTable(name = "role_user", joinColumns = {
+			@JoinColumn(name = "user_id", referencedColumnName = "id") }, inverseJoinColumns = {
+					@JoinColumn(name = "role_id", referencedColumnName = "id") })
+	private List<Role> roles;
 
 	public Integer getId() {
 		return id;
@@ -135,5 +137,21 @@ public class User implements Serializable {
 
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
+	}
+
+	public LocalDateTime getCreated() {
+		return created;
+	}
+
+	public void setCreated(LocalDateTime created) {
+		this.created = created;
+	}
+
+	public LocalDateTime getUpdated() {
+		return updated;
+	}
+
+	public void setUpdated(LocalDateTime updated) {
+		this.updated = updated;
 	}
 }
