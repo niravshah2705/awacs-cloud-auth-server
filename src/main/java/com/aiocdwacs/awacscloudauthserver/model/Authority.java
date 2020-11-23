@@ -1,5 +1,7 @@
 package com.aiocdwacs.awacscloudauthserver.model;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,7 +23,13 @@ public class Authority implements GrantedAuthority {
 
 	@Column(name = "name")
 	private String name;
+	
+	@Column(name = "created")
+	private LocalDateTime created;
 
+	@Column(name = "updated")
+	private LocalDateTime updated;
+	
 	@Override
 	public String getAuthority() {
 		return getName();
@@ -45,5 +53,21 @@ public class Authority implements GrantedAuthority {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public LocalDateTime getCreated() {
+		return created;
+	}
+
+	public void setCreated(LocalDateTime created) {
+		this.created = created;
+	}
+
+	public LocalDateTime getUpdated() {
+		return updated;
+	}
+
+	public void setUpdated(LocalDateTime updated) {
+		this.updated = updated;
 	}
 }

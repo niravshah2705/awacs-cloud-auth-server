@@ -1,4 +1,5 @@
 package com.aiocdwacs.awacscloudauthserver.config;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
@@ -16,49 +18,63 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 @Configuration
 @EnableAuthorizationServer
-//@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @Import(ServerSecurityConfig.class)
 public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter {
 
-    @Autowired
-    @Qualifier("dataSource")
-    private DataSource dataSource;
+	@Autowired
+	@Qualifier("dataSource")
+	private DataSource dataSource;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+	@Autowired
+	private AuthenticationManager authenticationManager;
 
-    @Autowired
-    private UserDetailsService userDetailsService;
+	@Autowired
+	private UserDetailsService userDetailsService;
 
-    @Autowired
-    private PasswordEncoder oauthClientPasswordEncoder;
+	@Autowired
+	private PasswordEncoder oauthClientPasswordEncoder;
 
-    @Bean
-    public TokenStore tokenStore() {
-        return new JdbcTokenStore(dataSource);
-    }
+	@Autowired
+	private JwtAccessTokenConverter jwtAccessTokenConverter;
 
-    @Bean
-    public OAuth2AccessDeniedHandler oauthAccessDeniedHandler() {
-        return new OAuth2AccessDeniedHandler();
-    }
 
-    @Override
-    public void configure(AuthorizationServerSecurityConfigurer oauthServer) {
-        oauthServer.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()").passwordEncoder(oauthClientPasswordEncoder);
-    }
+	@Bean
+	public TokenStore tokenStore() {
+		return new JwtTokenStore(jwtAccessTokenConverter);
+	}
 
-    @Override
-    public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.jdbc(dataSource);
-    }
+	@Bean
+	public OAuth2AccessDeniedHandler oauthAccessDeniedHandler() {
+		return new OAuth2AccessDeniedHandler();
+	}
 
-    @Override
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
-        endpoints.tokenStore(tokenStore()).authenticationManager(authenticationManager).userDetailsService(userDetailsService);
-    }
+	@Override
+	public void configure(AuthorizationServerSecurityConfigurer oauthServer) {
+		oauthServer.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()").passwordEncoder(oauthClientPasswordEncoder);
+	}
+
+	@Override
+	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+		clients.jdbc(dataSource);
+	}
+
+	@Override
+	public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
+		endpoints.authenticationManager(authenticationManager)
+		.accessTokenConverter(accessTokenConverter())
+		.userDetailsService(userDetailsService)
+		.tokenStore(tokenStore());
+	}
+
+	@Bean
+	JwtAccessTokenConverter accessTokenConverter() {
+		JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+		return converter;
+	}	
 }

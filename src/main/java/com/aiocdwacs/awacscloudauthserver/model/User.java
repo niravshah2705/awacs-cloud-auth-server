@@ -1,6 +1,7 @@
 package com.aiocdwacs.awacscloudauthserver.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 import javax.persistence.CascadeType;
@@ -33,6 +34,12 @@ public class User implements UserDetails, Serializable {
 	@Column(name = "user_name")
 	private String username;
 
+	@Column(name = "email")
+	private String email;
+	
+	@Column(name = "msisdn")
+	private String msisdn;
+	
 	@Column(name = "password")
 	private String password;
 
@@ -48,6 +55,12 @@ public class User implements UserDetails, Serializable {
 	@Column(name = "enabled")
 	private boolean enabled;
 
+	@Column(name = "created")
+	private LocalDateTime created;
+
+	@Column(name = "updated")
+	private LocalDateTime updated;
+	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "users_authorities", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
 	@OrderBy
@@ -131,6 +144,38 @@ public class User implements UserDetails, Serializable {
 	@Override
 	public boolean isCredentialsNonExpired() {
 		return !isCredentialsExpired();
+	}
+
+	public LocalDateTime getCreated() {
+		return created;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getMsisdn() {
+		return msisdn;
+	}
+
+	public void setMsisdn(String msisdn) {
+		this.msisdn = msisdn;
+	}
+
+	public void setCreated(LocalDateTime created) {
+		this.created = created;
+	}
+
+	public LocalDateTime getUpdated() {
+		return updated;
+	}
+
+	public void setUpdated(LocalDateTime updated) {
+		this.updated = updated;
 	}
 
 	public User() {
