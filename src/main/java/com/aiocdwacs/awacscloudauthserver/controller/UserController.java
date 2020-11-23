@@ -39,7 +39,6 @@ class UserController {
    }
    
    @GetMapping("/me")
-   @PreAuthorize("hasRole('SYSTEM')")
    public ResponseEntity<Principal> get(final Principal principal) {
        return ResponseEntity.ok(principal);
    }
