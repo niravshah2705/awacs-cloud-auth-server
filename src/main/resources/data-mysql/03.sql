@@ -13,6 +13,8 @@ insert into users_authorities(user_id, authority_id) values (1, 6);
 insert into users_authorities(user_id, authority_id) values (1, 7);
 insert into users_authorities(user_id, authority_id) values (1, 8);
 insert into users_authorities(user_id, authority_id) values (1, 9);
+insert into users_authorities(user_id, authority_id) values (1, 10);
+insert into users_authorities(user_id, authority_id) values (1, 11);
 
 insert into users_authorities(user_id, authority_id) values (2, 2);
 insert into users_authorities(user_id, authority_id) values (2, 6);
