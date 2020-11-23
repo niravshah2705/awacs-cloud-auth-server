@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import com.aiocdwacs.awacscloudauthserver.model.User;
 
 @Repository
-public interface UserDetailsRepository extends JpaRepository<User,Integer> {
+public interface UserRepository extends JpaRepository<User,Long> {
 
 	User findByUsername(String name);
 

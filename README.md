@@ -3,17 +3,16 @@
 
 ![Graal Native Image Release](https://github.com/girishaiocdawacs/awacs-cloud-auth-server/workflows/Graal%20Native%20Image%20Release/badge.svg)
 
-
-
-
-## create a session by generating an access token (expires_in is in second) (authserver) - username: a / password: a
-
 ```
-curl -X POST "http://localhost:8100/oauth/token?grant_type=client_credentials" -H "Authorization: Basic YTph"                                                             
-
-{"access_token":"c90d628a-4433-4a71-b8d8-db3d1b38fed3","token_type":"bearer","expires_in":43199,"scope":"all"}    
+curl -X POST \
+  http://localhost:8100/oauth/token \
+  -u "spring-security-oauth2-read-client:spring-security-oauth2-read-client-password1234" \
+  -F grant_type=password \
+  -F username=admin \
+  -F password=admin1234 \
+  -F client_id=spring-security-oauth2-read-client
+{"access_token":"521a8ff3-40f0-4b46-a3b2-ebc4fcd1ae75","token_type":"bearer","refresh_token":"cca3df8f-0b22-481f-a094-6068a49de2cf","expires_in":10799,"scope":"read"}
 ```
-
 ## then accessing a resource (productservice)
 
 ```curl -X GET -H "Authorization: Bearer c90d628a-4433-4a71-b8d8-db3d1b38fed3" http://localhost:8181/api/product/order/2  

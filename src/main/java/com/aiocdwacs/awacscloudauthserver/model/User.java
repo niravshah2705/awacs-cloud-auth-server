@@ -1,8 +1,7 @@
 package com.aiocdwacs.awacscloudauthserver.model;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Collection;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,64 +13,52 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
+import org.springframework.security.core.userdetails.UserDetails;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "users")
-public class User implements Serializable {
-
-	private static final long serialVersionUID = 1L;
-
-	public User() {
-	}
-
-	public User(User user) {
-		this.username = user.getUsername();
-		this.password = user.getPassword();
-		this.email = user.getEmail();
-		this.enabled = user.isEnabled();
-		this.accountNonExpired = user.isAccountNonExpired();
-		this.credentialsNonExpired = user.isCredentialsNonExpired();
-		this.accountNonLocked = user.isAccountNonLocked();
-		this.roles = user.getRoles();
-	}
+@Table(name = "awacs_user", uniqueConstraints = { @UniqueConstraint(columnNames = { "user_name" }) })
+public class User implements UserDetails, Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
+	@Column(name = "id")
+	private Long id;
 
-	@Column(name = "username")
+	@Column(name = "user_name")
 	private String username;
+
 	@Column(name = "password")
 	private String password;
-	@Column(name = "email")
-	private String email;
+
+	@Column(name = "account_expired")
+	private boolean accountExpired;
+
+	@Column(name = "account_locked")
+	private boolean accountLocked;
+
+	@Column(name = "credentials_expired")
+	private boolean credentialsExpired;
+
 	@Column(name = "enabled")
 	private boolean enabled;
-	@Column(name = "accountNonExpired")
-	private boolean accountNonExpired;
-	@Column(name = "credentialsNonExpired")
-	private boolean credentialsNonExpired;
-	@Column(name = "accountNonLocked")
-	private boolean accountNonLocked;
-
-	@Column(name = "created")
-	private LocalDateTime created;
-
-	@Column(name = "updated")
-	private LocalDateTime updated;
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = "role_user", joinColumns = {
-			@JoinColumn(name = "user_id", referencedColumnName = "id") }, inverseJoinColumns = {
-					@JoinColumn(name = "role_id", referencedColumnName = "id") })
-	private List<Role> roles;
+	@JoinTable(name = "users_authorities", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
+	@OrderBy
+	@JsonIgnore
+	private Collection<Authority> authorities;
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -91,12 +78,28 @@ public class User implements Serializable {
 		this.password = password;
 	}
 
-	public String getEmail() {
-		return email;
+	public boolean isAccountExpired() {
+		return accountExpired;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setAccountExpired(boolean accountExpired) {
+		this.accountExpired = accountExpired;
+	}
+
+	public boolean isAccountLocked() {
+		return accountLocked;
+	}
+
+	public void setAccountLocked(boolean accountLocked) {
+		this.accountLocked = accountLocked;
+	}
+
+	public boolean isCredentialsExpired() {
+		return credentialsExpired;
+	}
+
+	public void setCredentialsExpired(boolean credentialsExpired) {
+		this.credentialsExpired = credentialsExpired;
 	}
 
 	public boolean isEnabled() {
@@ -107,51 +110,30 @@ public class User implements Serializable {
 		this.enabled = enabled;
 	}
 
+	public Collection<Authority> getAuthorities() {
+		return authorities;
+	}
+
+	public void setAuthorities(Collection<Authority> authorities) {
+		this.authorities = authorities;
+	}
+
+	@Override
 	public boolean isAccountNonExpired() {
-		return accountNonExpired;
+		return !isAccountExpired();
 	}
 
-	public void setAccountNonExpired(boolean accountNonExpired) {
-		this.accountNonExpired = accountNonExpired;
-	}
-
-	public boolean isCredentialsNonExpired() {
-		return credentialsNonExpired;
-	}
-
-	public void setCredentialsNonExpired(boolean credentialsNonExpired) {
-		this.credentialsNonExpired = credentialsNonExpired;
-	}
-
+	@Override
 	public boolean isAccountNonLocked() {
-		return accountNonLocked;
+		return !isAccountLocked();
 	}
 
-	public void setAccountNonLocked(boolean accountNonLocked) {
-		this.accountNonLocked = accountNonLocked;
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return !isCredentialsExpired();
 	}
 
-	public List<Role> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(List<Role> roles) {
-		this.roles = roles;
-	}
-
-	public LocalDateTime getCreated() {
-		return created;
-	}
-
-	public void setCreated(LocalDateTime created) {
-		this.created = created;
-	}
-
-	public LocalDateTime getUpdated() {
-		return updated;
-	}
-
-	public void setUpdated(LocalDateTime updated) {
-		this.updated = updated;
+	public User() {
+		super();
 	}
 }
