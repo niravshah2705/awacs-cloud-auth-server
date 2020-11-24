@@ -1,6 +1,9 @@
 ![Maven Build](https://github.com/girishaiocdawacs/awacs-cloud-auth-server/workflows/Maven%20Build/badge.svg)
+
 ![Build and Deploy to GKE](https://github.com/girishaiocdawacs/awacs-cloud-auth-server/workflows/Build%20and%20Deploy%20to%20GKE/badge.svg)
+
 ![Graal Native Image Release](https://github.com/girishaiocdawacs/awacs-cloud-auth-server/workflows/Graal%20Native%20Image%20Release/badge.svg)
+
 
 
 ![oauth_nutshell](https://github.com/girishaiocdawacs/awacs-cloud-auth-server/blob/master/src/main/resources/oauth.png?raw=true)

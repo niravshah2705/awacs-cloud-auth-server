@@ -2,8 +2,8 @@ drop database awacs_cloud;
 create database awacs_cloud;
 use awacs_cloud;
 
-set global explicit_defaults_for_timestamp=ON;
-show global variables like '%timestamp%';
+-- set global explicit_defaults_for_timestamp=ON;
+-- show global variables like '%timestamp%';
 
 create table hibernate_sequence (next_val bigint);
 insert into hibernate_sequence values (1);
