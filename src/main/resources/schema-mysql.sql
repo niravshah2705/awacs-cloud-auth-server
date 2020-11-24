@@ -2,6 +2,9 @@ drop database awacs_cloud;
 create database awacs_cloud;
 use awacs_cloud;
 
+set global explicit_defaults_for_timestamp=ON;
+show global variables like '%timestamp%';
+
 create table hibernate_sequence (next_val bigint);
 insert into hibernate_sequence values (1);
 
@@ -27,8 +30,8 @@ create table oauth_client_token (
   authentication_id varchar(255) primary key,
   user_name varchar(255),
   client_id varchar(255),
-  created timestamp default CURRENT_TIMESTAMP,
-  updated timestamp default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP 
+  created timestamp not null default CURRENT_TIMESTAMP,
+  updated timestamp not null default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP 
 );
 
 create table oauth_access_token (
@@ -87,8 +90,8 @@ create table awacs_user (
   account_locked boolean,
   credentials_expired boolean,
   enabled boolean,
-  created timestamp default CURRENT_TIMESTAMP,
-  updated timestamp default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  created timestamp not null default CURRENT_TIMESTAMP,
+  updated timestamp not null default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   primary key (id)
 );
 
