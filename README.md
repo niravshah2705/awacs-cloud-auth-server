@@ -1,9 +1,8 @@
 ![Maven Build](https://github.com/girishaiocdawacs/awacs-cloud-auth-server/workflows/Maven%20Build/badge.svg)
 
-![Build and Deploy to GKE](https://github.com/girishaiocdawacs/awacs-cloud-auth-server/workflows/Build%20and%20Deploy%20to%20GKE/badge.svg)
-
 ![Graal Native Image Release](https://github.com/girishaiocdawacs/awacs-cloud-auth-server/workflows/Graal%20Native%20Image%20Release/badge.svg)
 
+![Build and Deploy to GKE](https://github.com/girishaiocdawacs/awacs-cloud-auth-server/workflows/Build%20and%20Deploy%20to%20GKE/badge.svg)
 
 
 ![oauth_nutshell](https://github.com/girishaiocdawacs/awacs-cloud-auth-server/blob/master/src/main/resources/oauth.png?raw=true)
@@ -95,7 +94,104 @@ curl -kSs -X GET  https://app.awacscloud.tech/productservice/api/product/order/4
    "quantity" : 300
 }
 ```
-OR, User IAM Profile call - 
+
+### upload a pdf file
+
+```
+curl -kSs -X POST https://app.awacscloud.tech/productservice/api/files/ -F "file=@.cockpit/demo.pdf" -H "Authorization":"bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJh dWQiOlsicmVzb3VyY2Utc2VydmVyLXJlc3QtYXBpIl0sInVzZXJfbmFtZSI6ImFkbWluIiwic2NvcGUiOlsicmVhZCIsIndyaXRlIl0sImV4cCI6MTYwNjIzNjAxOCwiYXV0aG9yaXRpZXMiOlsiU1lTVEVNIiwib3JkZXJfcmV hZCIsIm9yZGVyX2NyZWF0ZSIsInByb2R1Y3RfdXBkYXRlIiwib3JkZXJfZGVsZXRlIiwicm9sZV9wcm9kdWN0X29yZGVyX3JlYWRlciIsIlVTRVIiLCJvcmRlcl91cGRhdGUiLCJwcm9kdWN0X3JlYWQiLCJwcm9kdWN0X2NyZW F0ZSIsInByb2R1Y3RfZGVsZXRlIl0sImp0aSI6IjAxMDY2ZmJhLTk5ZTktNDk3ZC1hZDE5LTgyNGM4OThlYmQxMCIsImNsaWVudF9pZCI6Im5lbyJ9.ofqBYuY6UH2TIT6EuTNE-onJTQFj6MzlzMFmDVyRojY"             
+File successfully uploaded (demo.pdf!)  
+```
+
+### process an uploaded pdf file
+```
+curl -kSs -X GET https://app.awacscloud.tech/productservice/api/files/pdf/tenant/swami_medical/demo.pdf \
+-H "Authorization":"bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJh dWQiOlsicmVzb3VyY2Utc2VydmVyLXJlc3QtYXBpIl0sInVzZXJfbmFtZSI6ImFkbWluIiwic2NvcGUiOlsicmVhZCIsIndyaXRlIl0sImV4cCI6MTYwNjIzNjAxOCwiYXV0aG9yaXRpZXMiOlsiU1lTVEVNIiwib3JkZXJfcmV hZCIsIm9yZGVyX2NyZWF0ZSIsInByb2R1Y3RfdXBkYXRlIiwib3JkZXJfZGVsZXRlIiwicm9sZV9wcm9kdWN0X29yZGVyX3JlYWRlciIsIlVTRVIiLCJvcmRlcl91cGRhdGUiLCJwcm9kdWN0X3JlYWQiLCJwcm9kdWN0X2NyZW F0ZSIsInByb2R1Y3RfZGVsZXRlIl0sImp0aSI6IjAxMDY2ZmJhLTk5ZTktNDk3ZC1hZDE5LTgyNGM4OThlYmQxMCIsImNsaWVudF9pZCI6Im5lbyJ9.ofqBYuY6UH2TIT6EuTNE-onJTQFj6MzlzMFmDVyRojY"
+
+PHI;UT;Greg;Gross;Left;101;11;25;0;8;1;0.248
+SDP;RF;Tony;Gwynn;Left;642;107;211;14;59;37;0.329
+LAD;3B;Jeff;Hamilton;Right;147;22;33;5;19;0;0.224
+ATL;LF;Terry;Harper;Right;265;26;68;8;30;3;0.257
+HOU;CF;Billy;Hatcher;Right;419;55;108;6;36;38;0.258
+PHI;1B;Von;Hayes;Left;610;107;186;19;98;24;0.305
+STL;C;Mike;Heath;Right;190;19;39;4;25;2;0.205
+NYM;LF;Danny;Heep;Left;195;24;55;5;33;1;0.282
+NYM;1B;Keith;Hernandez;Left;551;94;171;13;83;2;0.31
+
+```
+
+### upload an excel file 
+
+```
+curl -kSs -X POST https://app.awacscloud.tech/productservice/api/files/ -F "file=@.cockpit/test.xlsx" -H "Authorization":"bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJh dWQiOlsicmVzb3VyY2Utc2VydmVyLXJlc3QtYXBpIl0sInVzZXJfbmFtZSI6ImFkbWluIiwic2NvcGUiOlsicmVhZCIsIndyaXRlIl0sImV4cCI6MTYwNjIzNjAxOCwiYXV0aG9yaXRpZXMiOlsiU1lTVEVNIiwib3JkZXJfcmV hZCIsIm9yZGVyX2NyZWF0ZSIsInByb2R1Y3RfdXBkYXRlIiwib3JkZXJfZGVsZXRlIiwicm9sZV9wcm9kdWN0X29yZGVyX3JlYWRlciIsIlVTRVIiLCJvcmRlcl91cGRhdGUiLCJwcm9kdWN0X3JlYWQiLCJwcm9kdWN0X2NyZW F0ZSIsInByb2R1Y3RfZGVsZXRlIl0sImp0aSI6IjAxMDY2ZmJhLTk5ZTktNDk3ZC1hZDE5LTgyNGM4OThlYmQxMCIsImNsaWVudF9pZCI6Im5lbyJ9.ofqBYuY6UH2TIT6EuTNE-onJTQFj6MzlzMFmDVyRojY"
+
+File successfully uploaded (test.xlsx!) 
+```
+
+### process an uploaded excel file
+```
+curl -kSs -X POST https://app.awacscloud.tech/productservice/api/files/excel/tenant/swami_medical/distributor/test.xlsx -F "file=@.cockpit/test.xlsx" -H "Authorization":"bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJh dWQiOlsicmVzb3VyY2Utc2VydmVyLXJlc3QtYXBpIl0sInVzZXJfbmFtZSI6ImFkbWluIiwic2NvcGUiOlsicmVhZCIsIndyaXRlIl0sImV4cCI6MTYwNjIzNjAxOCwiYXV0aG9yaXRpZXMiOlsiU1lTVEVNIiwib3JkZXJfcmV hZCIsIm9yZGVyX2NyZWF0ZSIsInByb2R1Y3RfdXBkYXRlIiwib3JkZXJfZGVsZXRlIiwicm9sZV9wcm9kdWN0X29yZGVyX3JlYWRlciIsIlVTRVIiLCJvcmRlcl91cGRhdGUiLCJwcm9kdWN0X3JlYWQiLCJwcm9kdWN0X2NyZW F0ZSIsInByb2R1Y3RfZGVsZXRlIl0sImp0aSI6IjAxMDY2ZmJhLTk5ZTktNDk3ZC1hZDE5LTgyNGM4OThlYmQxMCIsImNsaWVudF9pZCI6Im5lbyJ9.ofqBYuY6UH2TIT6EuTNE-onJTQFj6MzlzMFmDVyRojY" | json_pp
+[                                                                                                                                                                              {                                                                                                                                                                              "name" : "SUMATRIPTAN",                                                                                                                                                     "genericName" : "sumatriptan",                                                                                                                                              "quantity" : 17,                                                                                                                                                            "address" : "00 Kingsford Plaza",                                                                                                                                           "distributorName" : "Physicians Total Care, Inc.",                                                                                                                          "id" : 14,                                                                                                                                                                  "price" : 54                                                                                                                                                             },                                                                                                                                                                          {                                                                                                                                                                              "address" : "26 Banding Court",                                                                                                                                             "distributorName" : "STAT Rx USA LLC",                                                                                                                                      "id" : 71,                                                                                                                                                                  "price" : 60,                                                                                                                                                               "genericName" : "GLIMEPIRIDE",                                                                                                                                              "quantity" : 94,                                                                                                                                                            "name" : "GLIMEPIRIDE"                                                                                                                                                   },                                                                                                                                                                          {                                                                                                                                                                              "id" : 61,                                                                                                                                                                  "price" : 93,                                                                                                                                                               "address" : "4857 Fordem Court",                                                                                                                                            "distributorName" : "Perrigo New York Inc",                                                                                                                                 "quantity" : 81,                                                                                                                                                            "genericName" : "Halobetasol Propionate",                                                                                                                                   "name" : "Halobetasol Propionate"                                                                                                                                        },                                                                                                                                                                          {                                                                                                                                                                              "name" : "potassium chloride",                                                                                                                                              "distributorName" : "NCS HealthCare of KY, Inc dba Vangard Labs",                                                                                                           "address" : "48254 Oneill Street",                                                                                                                                          "price" : 86,                                                                                                                                                               "id" : 43,
+      "genericName" : "potassium chloride",
+      "quantity" : 63
+   },
+   {
+      "genericName" : "SOYBEAN OIL",
+      "quantity" : 59,
+      "distributorName" : "Baxter Healthcare Corporation",
+      "address" : "2 Paget Park",
+      "id" : 56,
+      "price" : 1,
+      "name" : "Intralipid"
+   },
+   {
+      "name" : "Clonidine Hydrochloride",
+      "price" : 13,
+      "id" : 78,
+      "distributorName" : "State of Florida DOH Central Pharmacy",
+      "address" : "7761 Summerview Parkway",
+      "quantity" : 85,
+      "genericName" : "CLONIDINE HYDROCHLORIDE"
+   },
+   {
+      "name" : "Extra Strength Headache Relief",
+      "price" : 84,
+      "id" : 90,
+      "distributorName" : "CHAIN DRUG MARKETING ASSOCIATION INC",
+      "address" : "82 Hollow Ridge Plaza",
+      "quantity" : 85,
+      "genericName" : "Acetaminophen, Aspirin and caffeine"
+   },
+   {
+      "address" : "55 Bayside Terrace",
+      "distributorName" : "Bryant Ranch Prepack",
+      "price" : 8,
+      "id" : 34,
+      "genericName" : "gabapentin",
+      "quantity" : 65,
+      "name" : "Gralise"
+   },
+   {
+      "name" : "Treatment Set TS332343",
+      "genericName" : "Treatment Set TS332343",
+      "quantity" : 88,
+      "address" : "47926 Merrick Pass",
+      "distributorName" : "Antigen Laboratories, Inc.",
+      "price" : 59,
+      "id" : 58
+   },
+   {
+      "genericName" : "calcium carbonate",
+      "quantity" : 94,
+      "address" : "78117 Erie Drive",
+      "distributorName" : "Solbin Co., Ltd",
+      "id" : 74,
+      "price" : 47,
+      "name" : "Solmeet denti doctor"
+   }
+]
+```
+
+### OR, User IAM Profile call - 
 
 ```
 curl -kSs -X GET -u neo:neo https://app.awacscloud.tech/authserver/api/users/me \
