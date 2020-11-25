@@ -36,6 +36,6 @@ public class RestCspReportCustomEndpoint {
 		logger.warn("CSP Incident detected - "+ incident);
 
 		// send notification ??
-		return ResponseEntity.ok("incident acknowledge");
+		return ResponseEntity.ok("incident acknowledged!");
     }
 }
