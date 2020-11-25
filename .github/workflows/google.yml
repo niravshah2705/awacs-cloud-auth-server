@@ -85,20 +85,14 @@ jobs:
         #./kustomize build . | kubectl apply -f -
         # kubectl rollout status deployment/$DEPLOYMENT_NAME
         # kubectl delete service clusterip authserver
-        echo "-----------------------------------------------------"
-        kubectl create deployment authserver --image=gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA --dry-run=client -o=yaml > authserver.yaml
-        echo "---" >> authserver.yaml
-        kubectl create service clusterip authserver --tcp=8100:8100 --dry-run=client -o=yaml >> authserver.yaml
+        sleep 3; # as we are using latest tag in k8s which just baked we give some time to settle a build
+	echo "-----------------------------------------------------"
+        ###kubectl create deployment authserver --image=gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA --dry-run=client -o=yaml > authserver.yaml
+        ###echo "---" >> authserver.yaml
+        ###kubectl create service clusterip authserver --tcp=8100:8100 --dry-run=client -o=yaml >> authserver.yaml
         echo "-----------------------------------------------"
         cat authserver.yaml
         echo "-----------------------------------------------"
         kubectl apply -f authserver.yaml
         echo "-----------------------------------------------"
-        # kubectl get all
-        # kubectl delete rs --all
-        echo "-----------------------------------------------"
-        # kubectl get services -o wide
-        echo "-----------------------------------------------"
-        # kubectl get all
-        echo "-------------------------------------------------"
-   
+ 

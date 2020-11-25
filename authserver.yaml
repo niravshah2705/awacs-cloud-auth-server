@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f awacs-cloud.yml
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: authserver
+  name: authserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: authserver
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f awacs-cloud.yml
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: authserver
+    spec:
+      containers:
+      - env:
+        - name: spring.boot.admin.client.password
+          value: awacs
+        - name: spring.boot.admin.client.url
+          value: http://adminserver:8765
+        - name: spring.boot.admin.client.username
+          value: awacs
+        - name: spring.datasource.password
+          value: secret
+        - name: spring.datasource.url
+          value: jdbc:mysql://db:3306/awacs_cloud
+        - name: spring.datasource.username
+          value: root
+        - name: spring.jpa.properties.hibernate.dialect
+          value: org.hibernate.dialect.MySQL8Dialect
+        - name: spring.jpa.show-sql
+          value: "true"
+        image: gcr.io/awacs-cloud-prod/awacs-cloud-auth-server:latest
+        imagePullPolicy: ""
+        name: authserver
+        ports:
+        - containerPort: 8100
+        resources: {}
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes: null
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f awacs-cloud.yml
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: authserver
+  name: authserver
+spec:
+  ports:
+  - name: "8100"
+    port: 8100
+    targetPort: 8100
+  selector:
+    io.kompose.service: authserver
+status:
+  loadBalancer: {}
