@@ -352,4 +352,36 @@ curl -kSs -X GET -u SYSTEM!ClientId:SYSTEM!ClientSecret https://app.awacscloud.t
    "exp" : 1606228675
 }
 ```
+
+#### CSP Report Endpoint Incident payload (No notification release so far just a stackdriver warn logging)
+```sh
+curl -kisS --location --request GET 'https://qa.awacscloud.tech/authserver/actuator/csp/report' \
+-H 'Content-Type: application/json' \
+--data-raw '{
+    "csp-report": {
+        "document-uri": "https://example.com/foo/bar",
+        "referrer": "https://www.google.com/",
+        "violated-directive": "default-src self",
+        "original-policy": "default-src self; report-uri /csp-hotline.php",
+        "blocked-uri": "http://evilhackerscripts.com"
+    }
+}'
+HTTP/1.1 200
+Server: nginx/1.19.5
+Date: Wed, 25 Nov 2020 13:04:55 GMT
+Content-Type: text/plain;charset=UTF-8
+Content-Length: 20
+Connection: keep-alive
+Content-Security-Policy: default-src 'self'; script-src 'self' https://app.awacscloud.tech; object-src 'self' https://qa.awacscloud.tech; report-uri /authserver/actuator/csp/report
+Strict-Transport-Security: max-age=16070400; includeSubDomains
+X-Frame-Options: DENY
+X-XSS-Protection: 1; mode=block
+X-Content-Type-Options: nosniff
+Referrer-Policy:: no-referrer
+Feature-Policy:: none
+Permissions-Policy: accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()
+
+incident acknowledge
+```
+
 See Also - https://github.com/girishaiocdawacs/awacs-cloud-production-shakeout/runs/1447024093?check_suite_focus=true
