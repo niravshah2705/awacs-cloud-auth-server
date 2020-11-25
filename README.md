@@ -22,7 +22,13 @@ Available clients -
 | neo       | neo          |
 | bluesky   | bluesky      |
 
-CSP Security checks - clear
+
+####  CSP Security checks - clear
+``` 
+ https://securityheaders.com/?q=https%3A%2F%2Fqa.awacscloud.tech%2F&followRedirects=on
+
+```
+
 ![oauth_nutshell](https://github.com/girishaiocdawacs/awacs-cloud-auth-server/blob/master/src/main/resources/security.png?raw=true)
 
 ```
