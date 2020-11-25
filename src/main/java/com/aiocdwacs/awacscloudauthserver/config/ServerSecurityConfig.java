@@ -40,6 +40,6 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
     	super.configure(web);
-        web.ignoring().antMatchers("/actuator/**", "/actuator/csp/report");
+        web.ignoring().antMatchers("/actuator/**");
     }
 }
