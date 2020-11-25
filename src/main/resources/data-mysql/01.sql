@@ -27,10 +27,15 @@ insert into oauth_client_details(client_id, resource_ids, client_secret, scope, 
 	values ('morpheus', 'resource-server-rest-api',
 	/*morpheus*/'$2y$04$k88sd/k6PkO2XrrMc3Eq8u1oNcsT.Ti2CrzOG1suEhEPaBpt0yzDm',
 	'read,write', 'password,authorization_code,refresh_token', 'USER', 10800, 2592000);
+
+insert into oauth_client_details(client_id, resource_ids, client_secret, scope, authorized_grant_types, authorities, access_token_validity, refresh_token_validity)
+	values ('cypher', 'resource-server-rest-api',
+	/*cypher*/'$2y$08$FyH7twtnGcsUMfqewqZ0PeLms8S2vP6X5sbY/hvqHc7FG/bOhkEpG',
+	'read,write', 'client_credentials,password,authorization_code,refresh_token', 'USER', 240, 240);
 	
 	
 insert into oauth_client_details(client_id, resource_ids, client_secret, scope, authorized_grant_types, authorities, access_token_validity, refresh_token_validity)
 	values ('bluesky', 'resource-server-rest-api',
 	/*bluesky*/'$2y$08$1k6aEldpcDovzErVENCjL.BZzqMP/0zoF9T/z859FgxPoQL90Nq2O',
-	'read,write', 'client_credentials,password,authorization_code,refresh_token', 'JMETER', 10800, 2592000);
+	'read,write', 'client_credentials,password,authorization_code,refresh_token', 'JMETER', 180, 180);
 	
