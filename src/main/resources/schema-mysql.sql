@@ -84,18 +84,23 @@ alter table authority add constraint authority_name unique(name);
 
 create table awacs_user (
   id bigint not null auto_increment,
-  password varchar(255),
-  user_name varchar(255),
-  account_expired boolean,
-  account_locked boolean,
-  credentials_expired boolean,
-  enabled boolean,
-  created timestamp not null default CURRENT_TIMESTAMP,
-  updated timestamp not null default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  primary key (id)
+  email varchar(255) default null,
+  msisdn varchar(255) default null,
+  user_name varchar(255) default null,
+  password varchar(255) default null,
+  account_expired tinyint(1) default null,
+  account_locked tinyint(1) default null,
+  credentials_expired tinyint(1) default null,
+  enabled tinyint(1) default null,
+  created timestamp not null default current_timestamp,
+  updated timestamp not null default current_timestamp on update current_timestamp,
+  primary key (id),
+  unique key user_user_name (user_name),
+  unique key user_email  (email),
+  unique key user_msisdn (msisdn)
 );
 
-alter table awacs_user add constraint user_user_name unique(user_name);
+alter table awacs_user add constraint user_username_email_msisdn unique(user_name, email, msisdn);
 
 create table users_authorities (
    user_id bigint not null auto_increment,

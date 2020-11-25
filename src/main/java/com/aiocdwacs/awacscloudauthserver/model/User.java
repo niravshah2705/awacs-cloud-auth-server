@@ -31,7 +31,7 @@ public class User implements UserDetails, Serializable {
 	@Column(name = "id")
 	private Long id;
 
-	@Column(name = "user_name")
+	@Column(name = "user_name", updatable = false)
 	private String username;
 
 	@Column(name = "email")
@@ -55,10 +55,10 @@ public class User implements UserDetails, Serializable {
 	@Column(name = "enabled")
 	private boolean enabled;
 
-	@Column(name = "created")
+	@Column(name = "created", updatable= false)
 	private LocalDateTime created;
 
-	@Column(name = "updated")
+	@Column(name = "updated", updatable = false)
 	private LocalDateTime updated;
 	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
