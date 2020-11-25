@@ -3,22 +3,31 @@ package com.aiocdwacs.awacscloudauthserver.controller;
 import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.common.OAuth2RefreshToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,15 +46,20 @@ import com.aiocdwacs.awacscloudauthserver.repository.UserRepository;
 @Validated
 class UserController {
 
-	 private static final String EMAIL_PATTERN = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])"; //RFC-2822
+	private static final String EMAIL_PATTERN = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])"; //RFC-2822
+
+	private static final String PHONE_PATTERN = "^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$" 
+			+ "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$" 
+			+ "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$";
 
 	private final UserRepository repository;
-
+	private TokenStore tokenStore;
 	private final PasswordEncoder passwordEncoder;
 
-	UserController(UserRepository repository, PasswordEncoder passwordEncoder) {
+	UserController(UserRepository repository, PasswordEncoder passwordEncoder, TokenStore tokenStore) {
 		this.repository = repository;
 		this.passwordEncoder = passwordEncoder;
+		this.tokenStore = tokenStore;
 	}
 
 	@GetMapping("/principal")
@@ -85,14 +99,14 @@ class UserController {
 
 	@PutMapping("/{id}")
 	@PreAuthorize("hasAuthority('SYSTEM')")
-	@ResponseBody ResponseEntity<String> update(@PathVariable Long id, @RequestBody User res) throws UsernameCannotUpdateException, InvalidEmailFormatException {
-		
+	@ResponseBody ResponseEntity<String> update(@PathVariable Long id, @RequestBody User res) throws UsernameCannotUpdateException, InvalidEmailFormatException, InvalidPhoneFormatException {
+
 		Optional<User> u = repository.findById(id);
 		if(!u.isEmpty()) {
 			User userToSave = u.get();
 
 			if (Objects.nonNull(res.getUsername())) {
-				throw new UsernameCannotUpdateException( "payload contains username, however username can not meant to be update here. Sorry");
+				throw new UsernameCannotUpdateException("payload contains username, however username can not meant to be update here. Sorry");
 			}
 
 			if(Objects.nonNull(res.getEmail())) {
@@ -103,7 +117,12 @@ class UserController {
 				}
 			}
 			if(Objects.nonNull(res.getMsisdn())) {
-				userToSave.setMsisdn(res.getMsisdn());
+				if(Pattern.matches(PHONE_PATTERN, res.getMsisdn())) {
+					userToSave.setMsisdn(res.getMsisdn());
+				}else {
+					throw new InvalidPhoneFormatException("Invalid phone: "+res.getMsisdn());
+				}
+
 			}
 			if(Objects.nonNull(res.getPassword())) {
 				userToSave.setPassword(passwordEncoder.encode(res.getPassword()));
@@ -125,16 +144,41 @@ class UserController {
 			//
 			userToSave.setUpdated(LocalDateTime.now());	
 			repository.save(userToSave);
-			ResponseEntity.ok("success");
+			return ResponseEntity.ok("success");
 		}
-		return ResponseEntity.ok("user does not exists with id="+id);
+		return ResponseEntity.notFound().build();
 	}
 
-	@PostMapping
+	@PostMapping("/temporary/signup")
 	@PreAuthorize("hasAuthority('SYSTEM')")
-	@ResponseBody ResponseEntity<User> create(@RequestBody User res) {
+	@ResponseBody ResponseEntity<User> create(@RequestBody User res, HttpServletRequest request) {
+		res.setCreated(LocalDateTime.now());		//known issue
+		res.setUpdated(res.getCreated());
+		res.setPassword(passwordEncoder.encode(res.getPassword()));
 		User u = repository.save(res);
-		return ResponseEntity.accepted().build();
+		revoke(request);
+		return ResponseEntity.ok(u);
+	}
+
+	@PostMapping("/temporary/logout")
+	@PreAuthorize("hasAuthority('SYSTEM')")
+	public ResponseEntity<Object> revoke(HttpServletRequest request) {
+		try {
+			String authorization = request.getHeader("Authorization");
+			if (authorization != null && authorization.contains("Bearer")) {
+				String tokenValue = authorization.replace("Bearer", "").trim();
+
+				OAuth2AccessToken accessToken = tokenStore.readAccessToken(tokenValue);
+				tokenStore.removeAccessToken(accessToken);
+
+				//OAuth2RefreshToken refreshToken = tokenStore.readRefreshToken(tokenValue);
+				OAuth2RefreshToken refreshToken = accessToken.getRefreshToken();
+				tokenStore.removeRefreshToken(refreshToken);
+			}
+		} catch (Exception e) {
+			return handleException(e, "Invalid access token");
+		}
+		return ResponseEntity.ok().body("Access token invalidated successfully");
 	}
 
 	@DeleteMapping("/{id}")
@@ -147,7 +191,7 @@ class UserController {
 		}
 	}
 
-	@PutMapping("/{id}/changePassword")
+	@PutMapping("/{id}/oldpwd/changePassword")
 	@PreAuthorize("hasAuthority('SYSTEM') || (#oldPassword != null && !#oldPassword.isEmpty() && authentication.principal == @userRepository.findById(#id).orElse(new net.reliqs.gleeometer.users.User()).email)")
 	void changePassword(@PathVariable Long id, @RequestParam(required = false) String oldPassword, @RequestParam String newPassword) throws UserPrincipalNotFoundException, ChangePasswordException {
 		User user = repository.findById(id).orElseThrow(() -> new UserPrincipalNotFoundException("id="+id));
@@ -157,5 +201,37 @@ class UserController {
 		} else {
 			throw new ChangePasswordException("old password doesn't match");
 		}
+	}
+
+
+
+	@ExceptionHandler(InvalidPhoneFormatException.class)
+	public ResponseEntity<?> handle(InvalidPhoneFormatException exc) {
+		//return ResponseEntity.status(1124).body(new ApiError(HttpStatus.BAD_REQUEST, exc.getMessage(), exc));
+		return handleException(exc, exc.getMessage());
+	}
+	@ExceptionHandler(UserPrincipalNotFoundException.class)
+	public ResponseEntity<?> handle(UserPrincipalNotFoundException exc) {
+		return handleException(exc, exc.getMessage());
+	}
+
+	@ExceptionHandler(ChangePasswordException.class)
+	public ResponseEntity<?> handle(ChangePasswordException exc) {
+		return handleException(exc, exc.getMessage());
+	}
+
+	@ExceptionHandler(InvalidEmailFormatException.class)
+	public ResponseEntity<?> handle(InvalidEmailFormatException exc) {
+		return handleException(exc, exc.getMessage());
+	}
+
+	private ResponseEntity<Object> handleException(Exception exc, String message) {
+		Map<String, Object> body = new LinkedHashMap<>();
+		body.put("timestamp", LocalDateTime.now());
+		body.put("message", message);
+		body.put("x-powered-by", "AwacsInternational");
+
+		body.put("errors", exc.getStackTrace()[0]);
+		return new ResponseEntity<Object>(body, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }

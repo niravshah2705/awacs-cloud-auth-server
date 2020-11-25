@@ -6,7 +6,7 @@ use awacs_cloud;
 -- show global variables like '%timestamp%';
 
 create table hibernate_sequence (next_val bigint);
-insert into hibernate_sequence values (1);
+insert into hibernate_sequence values (1000);
 
 create table oauth_client_details (
   client_id varchar(255) primary key,
