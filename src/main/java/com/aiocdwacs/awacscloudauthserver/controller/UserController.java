@@ -102,7 +102,7 @@ class UserController {
 	@ResponseBody ResponseEntity<String> update(@PathVariable Long id, @RequestBody User res) throws UsernameCannotUpdateException, InvalidEmailFormatException, InvalidPhoneFormatException {
 
 		Optional<User> u = repository.findById(id);
-		if(!u.isEmpty()) {
+		if(u.isPresent()) {
 			User userToSave = u.get();
 
 			if (Objects.nonNull(res.getUsername())) {
