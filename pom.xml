@@ -22,6 +22,8 @@
 			com.aiocdwacs.awacscloudauthserver.AwacsCloudAuthServerApplication
 		</start-class>
 		<maven.test.skip>true</maven.test.skip>
+		<timestamp>${maven.build.timestamp}</timestamp>
+		<maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
 		<java.version>8</java.version>
 		<sonar.projectKey>girishaiocdawacs_awacs-cloud-auth-server</sonar.projectKey>
 		<sonar.organization>girishaiocdawacs</sonar.organization>
