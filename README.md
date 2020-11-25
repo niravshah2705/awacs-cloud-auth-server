@@ -22,6 +22,8 @@ Available clients -
 | neo       | neo          |
 | bluesky   | bluesky      |
 
+CSP Security checks - clear
+![oauth_nutshell](https://github.com/girishaiocdawacs/awacs-cloud-auth-server/blob/master/src/main/resources/security.png?raw=true)
 
 ```
 curl -kSs -X POST \
