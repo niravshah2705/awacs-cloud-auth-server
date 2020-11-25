@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.actuate.endpoint.web.annotation.RestControllerEndpoint;
 import org.springframework.http.ResponseEntity;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +31,7 @@ public class RestCspReportCustomEndpoint {
 
 	Logger logger = LoggerFactory.getLogger(RestCspReportCustomEndpoint.class);
 	
+	@Retryable(maxAttempts=3, value=RuntimeException.class, backoff = @Backoff( delay = 300000, multiplier = 2) )
 	@GetMapping("/report")
     public @ResponseBody ResponseEntity<String> reportEndpoint(@RequestBody CspReport incident){
 		
