@@ -1,6 +1,6 @@
 version: '3.3'
 services:
-  
+
   adminserver:
     build: admin-server
     restart: always
@@ -11,7 +11,7 @@ services:
     environment:
       spring.security.user.name : awacs
       spring.security.user.password : awacs
-  
+
   socialweb:
     build: smart-pharmacy-user-management
     restart: always
@@ -20,6 +20,9 @@ services:
     expose:
      - "9393"
     environment:
+     spring.boot.admin.client.url: "http://adminserver:8765"
+     spring.boot.admin.client.username: awacs
+     spring.boot.admin.client.password: awacs
      social_login_type: "github, facebook, google"
 
   authserver:
@@ -29,17 +32,25 @@ services:
      - 8100:8100
     expose:
      - 8100
+    links:
+      - db
     depends_on:
       - db
     environment:
+         spring.profiles.active: docker
          spring.boot.admin.client.url: "http://adminserver:8765"
-         spring.boot.admin.client.username: 'awacs'
-         spring.boot.admin.client.password: 'awacs'
+         spring.boot.admin.client.username: awacs
+         spring.boot.admin.client.password: awacs
          spring.datasource.url : "jdbc:mysql://db:3306/awacs_cloud"
-         spring.datasource.username : root
-         spring.datasource.password : secret
+         spring.datasource.username : 'devbot'
+         spring.datasource.password : 'devbot'
          spring.jpa.properties.hibernate.dialect : org.hibernate.dialect.MySQL8Dialect
          spring.jpa.show-sql : "true"
+         management.endpoints.web.exposure.include: "*"
+         management.metrics.export.stackdriver.project-id: "awacs-cloud-prod"
+         management.metrics.export.stackdriver.step: 30s
+         management.info.git.mode: "full"
+         management.endpoint.shutdown.enabled: "false"
 
   productservice:
     build: smart-pharmacy-product-service
@@ -54,35 +65,42 @@ services:
     environment:
          SPRING_PROFILES_ACTIVE: dev
          spring.boot.admin.client.url: "http://adminserver:8765"
-         spring.boot.admin.client.username: 'awacs'
-         spring.boot.admin.client.password: 'awacs'
+         spring.boot.admin.client.username: awacs
+         spring.boot.admin.client.password: awacs
          awacs.cloud.auth-server.check-token : "http://authserver:8100/oauth/check_token"
          spring.activemq.broker-url : "tcp://jms:61616"
          spring.activemq.in-memory : "false"
          spring.cloud.gcp.project-id: "awacs-cloud-prod"
-  
+         management.endpoints.web.exposure.include: "*"
+         management.metrics.export.stackdriver.project-id: "awacs-cloud-prod"
+         management.metrics.export.stackdriver.step: 30s
+         management.info.git.mode: "full"
+         management.endpoint.shutdown.enabled: "false"
+         
 
   db:
     image: mysql
-    command: --default-authentication-plugin=mysql_native_password
+    command: --default-authentication-plugin=mysql_native_password --explicit-defaults-for-timestamp=ON
     restart: always
-    ports: 
+    ports:
       - 3306:3306
     environment:
       MYSQL_DATABASE: awacs_cloud
-      MYSQL_ROOT_PASSWORD: secret
-    volumes: 
+      MYSQL_ROOT_PASSWORD: 'secret'
+      MYSQL_USER: "devbot"
+      MYSQL_PASSWORD: "devbot"
+    volumes:
       - ./db/:/docker-entrypoint-initdb.d/
 
   jms:
     image: webcenter/activemq:latest
     restart: always
-    ports: 
+    ports:
       - 61616:61616
       - 8161:8161
       - 61613:61613
     environment:
-      ACTIVEMQ_ADMIN_LOGIN: admin 
+      ACTIVEMQ_ADMIN_LOGIN: admin
       ACTIVEMQ_ADMIN_PASSWORD: admin123
       ACTIVEMQ_CONFIG_QUEUES_controller.events.error: controller.events.error
     deploy:
@@ -98,9 +116,9 @@ services:
      - 8080
 
   nginx:
-   build: 
+   build:
       context: awacs-nginx
-      dockerfile: Dockerfile.nginx
+      dockerfile: Dockerfile.nginx.qa
    container_name: awacs_nginx
    restart: always
    ports:
