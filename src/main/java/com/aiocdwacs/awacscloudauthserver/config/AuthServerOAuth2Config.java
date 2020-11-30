@@ -54,19 +54,19 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
 	    return new RedisTokenStore(redisConnectionFactory);
 	}
 
-		
+
 //	@Bean
 //	public TokenStore tokenStore() {
 //
 //		final TokenApprovalStore tokenApprovalStore = new TokenApprovalStore();
 //	    tokenApprovalStore.setTokenStore(new RedisTokenStore(redisConnectionFactory));
-//	    
+//
 //	    final JwtTokenStore jwtTokenStore 			= new JwtTokenStore(jwtAccessTokenConverter);
 //	    jwtTokenStore.setApprovalStore(tokenApprovalStore);
-//	    
+//
 //	    return jwtTokenStore;
 //	}
-	
+
 //	@Bean
 //	public TokenStore tokenStore() {
 //		return new JwtTokenStore(jwtAccessTokenConverter);
@@ -99,5 +99,5 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
 	JwtAccessTokenConverter accessTokenConverter() {
 		JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
 		return converter;
-	}	
+	}
 }
