@@ -12,3 +12,4 @@ insert into authority(id, name) values (9, 'role_product_order_reader');
 
 insert into authority(id, name) values (10, 'SYSTEM');
 insert into authority(id, name) values (11, 'USER');
+insert into authority(id, name) values (12, 'implicit');

@@ -17,6 +17,7 @@ insert into awacs_user(id, user_name, email, password, account_expired, account_
   VALUES (102, 'reader', "balkrishna@aiocdawacs.com",/*reader1234*/'$2a$08$dwYz8O.qtUXboGosJFsS4u19LHKW7aCQ0LXXuNlRfjjGKwj5NfKSe', false, false, false, true);
 
   
+insert into users_authorities(user_id, authority_id) values (100, 12);		
 insert into users_authorities(user_id, authority_id) values (101, 1);
 insert into users_authorities(user_id, authority_id) values (101, 2);
 insert into users_authorities(user_id, authority_id) values (101, 3);
@@ -28,6 +29,5 @@ insert into users_authorities(user_id, authority_id) values (101, 8);
 insert into users_authorities(user_id, authority_id) values (101, 9);
 insert into users_authorities(user_id, authority_id) values (101, 10);
 insert into users_authorities(user_id, authority_id) values (101, 11);
-
 insert into users_authorities(user_id, authority_id) values (102, 2);
 insert into users_authorities(user_id, authority_id) values (102, 6);

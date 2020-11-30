@@ -1,5 +1,6 @@
 package com.aiocdwacs.awacscloudauthserver.service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -44,7 +45,7 @@ public class CloudGrpcCheckTokenServiceImpl extends GrpcAwacsTokenServiceImplBas
 
 	@SuppressWarnings("unchecked")
 	@Override
-	@PreAuthorize("hasRole('implicit')")
+	@PreAuthorize("hasAuthority('implicit')" )
 	public void checkToken(CheckTokenRequest request, StreamObserver<CheckTokenReply> responseObserver) {
 
 		logger.info("gRPC call for checkToken invoked ");
@@ -63,15 +64,18 @@ public class CloudGrpcCheckTokenServiceImpl extends GrpcAwacsTokenServiceImplBas
 
 		Map<String, Object> response = (Map<String, Object>) accessTokenConverter.convertAccessToken(token, authentication);
 
+		Long millis  	   = (Long)response.get(FrameworkParams.exp.name());
+		Timestamp exp      = Timestamp.newBuilder().setSeconds(millis / 1000).setNanos((int) ((millis % 1000) * 1000000)).build();
+
 		String clientId    = (String)response.get(FrameworkParams.client_id.name());
 		String userName    = (String)response.get(FrameworkParams.user_name.name());
-		Timestamp exp      = (Timestamp)response.get(FrameworkParams.exp.name());
-		Boolean isActive   = (Boolean)response.get(FrameworkParams.active.name());
+				
+		Boolean isActive   = null == response.get(FrameworkParams.active.name()) ? Boolean.TRUE: Boolean.FALSE;
 
 		CheckTokenReply reply = CheckTokenReply.newBuilder()
 				.setApproved(isActive)
 				.setUsername(userName)
-				.setAuthorities(Authority.newBuilder().addAllAuthority((Set<String>) response.get(FrameworkParams.authorities.name())).build())
+				.setAuthorities(Authority.newBuilder().addAllAuthority((List<String>) response.get(FrameworkParams.authorities.name())).build())
 				.setClientId(clientId)
 				.setScope(Scope.newBuilder().addAllScope((Set<String>) response.get(FrameworkParams.scope.name())).build())
 				.setExp(exp)

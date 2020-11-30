@@ -1,10 +1,14 @@
+
+
 package com.aiocdwacs.awacscloudauthserver.actuator;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.google.gson.GsonBuilder;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class CspReport {
@@ -20,7 +24,8 @@ public class CspReport {
 		this.cspReportMap = cspReportMap;
 	}
 	
-	public String toString(){
-		return new GsonBuilder().setPrettyPrinting().create().toJson(this);
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
 	}
 }

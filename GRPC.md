@@ -176,3 +176,40 @@ ERROR:
   Code: PermissionDenied
   Message: Access denied
 ```  
+
+### GRPC Successful checkToken implicit call example 
+Get Token from REST - (postman), then use wakandagrpc:wakandagrpc basic auth
+
+```
+grpcurl --rpc-header "Authorization: Basic d2FrYW5kYWdycGM6d2FrYW5kYWdycGM=" --plaintext -d "{\"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsicmVzb3VyY2Utc2VydmVyLXJlc3QtYXBpIl0sInVzZXJfbmFtZSI6ImFkbWluIiwic2NvcGUiOlsicmVhZCIsIndyaXRlIl0sImV4cCI6MTYwNjc3NDcxNywiYXV0aG9yaXRpZXMiOlsiU1lTVEVNIiwib3JkZXJfcmVhZCIsIm9yZGVyX2NyZWF0ZSIsInByb2R1Y3RfdXBkYXRlIiwib3JkZXJfZGVsZXRlIiwicm9sZV9wcm9kdWN0X29yZGVyX3JlYWRlciIsIlVTRVIiLCJvcmRlcl91cGRhdGUiLCJwcm9kdWN0X3JlYWQiLCJwcm9kdWN0X2NyZWF0ZSIsInByb2R1Y3RfZGVsZXRlIl0sImp0aSI6IjAzZTc5ZTllLTJhOWItNGU2Ny04ZTg0LWVjZDZmNTk2YzY3ZCIsImNsaWVudF9pZCI6Im5lbyJ9.oe73_ypVF3OnslNzlgbcRj4ScnmeaIOB992DKtCeayo\"}" localhost:9345 com.aiocdawacs.boot.grpc.interface.GrpcAwacsTokenService/CheckToken
+
+{
+  "username": "admin",
+  "approved": true,
+  "client_id": "neo",
+  "authorities": {
+    "authority": [
+      "SYSTEM",
+      "order_read",
+      "order_create",
+      "product_update",
+      "order_delete",
+      "role_product_order_reader",
+      "USER",
+      "order_update",
+      "product_read",
+      "product_create",
+      "product_delete"
+    ]
+  },
+  "scope": {
+    "scope": [
+      "read",
+      "write"
+    ]
+  },
+  "exp": "1970-01-19T14:19:34.717Z",
+  "whoami": "check_token"
+}
+
+```
