@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,12 +16,10 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.approval.TokenApprovalStore;
 import org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
-import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 @Configuration
 @EnableAuthorizationServer
@@ -46,31 +43,10 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
 	@Autowired
 	private JwtAccessTokenConverter jwtAccessTokenConverter;
 
-	@Autowired
-	private RedisConnectionFactory redisConnectionFactory;
-
 	@Bean
 	public TokenStore tokenStore() {
-	    return new RedisTokenStore(redisConnectionFactory);
+		return new JwtTokenStore(jwtAccessTokenConverter);
 	}
-
-
-//	@Bean
-//	public TokenStore tokenStore() {
-//
-//		final TokenApprovalStore tokenApprovalStore = new TokenApprovalStore();
-//	    tokenApprovalStore.setTokenStore(new RedisTokenStore(redisConnectionFactory));
-//
-//	    final JwtTokenStore jwtTokenStore 			= new JwtTokenStore(jwtAccessTokenConverter);
-//	    jwtTokenStore.setApprovalStore(tokenApprovalStore);
-//
-//	    return jwtTokenStore;
-//	}
-
-//	@Bean
-//	public TokenStore tokenStore() {
-//		return new JwtTokenStore(jwtAccessTokenConverter);
-//	}
 
 	@Bean
 	public OAuth2AccessDeniedHandler oauthAccessDeniedHandler() {

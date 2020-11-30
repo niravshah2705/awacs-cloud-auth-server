@@ -20,6 +20,7 @@ public class GrpcServerConfig {
 	
 	@Bean
 	public GrpcServerConfigurer keepAliveServerConfigurer() {
+		
 	    return serverBuilder -> {
 	        if (serverBuilder instanceof NettyServerBuilder) {
 	            ((NettyServerBuilder) serverBuilder)

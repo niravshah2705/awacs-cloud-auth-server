@@ -44,7 +44,7 @@ public class CloudGrpcCheckTokenServiceImpl extends GrpcAwacsTokenServiceImplBas
 
 	@SuppressWarnings("unchecked")
 	@Override
-	@PreAuthorize("hasRole('IMPLICIT')")
+	@PreAuthorize("hasRole('implicit')")
 	public void checkToken(CheckTokenRequest request, StreamObserver<CheckTokenReply> responseObserver) {
 
 		logger.info("gRPC call for checkToken invoked ");
@@ -81,14 +81,4 @@ public class CloudGrpcCheckTokenServiceImpl extends GrpcAwacsTokenServiceImplBas
 		responseObserver.onNext(reply);
 		responseObserver.onCompleted();
 	}
-
-	private Authority buildAuthority(String[] authorityArray) {
-
-		Authority.Builder authorities = Authority.newBuilder();
-		for (String authority : authorityArray) {
-			authorities.addAuthority(authority);
-		}
-		return authorities.build();
-	}
-
 }

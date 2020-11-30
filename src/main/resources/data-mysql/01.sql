@@ -1,15 +1,7 @@
--- implicit client for sub microservices (resource servers check_token call)
 
 insert into oauth_client_details(client_id, resource_ids, client_secret, scope, authorized_grant_types, authorities, access_token_validity, refresh_token_validity)
-	values ('spring-security-oauth2-read-client', 'resource-server-rest-api',
-	/*spring-security-oauth2-read-client-password1234*/'$2a$04$WGq2P9egiOYoOFemBRfsiO9qTcyJtNRnPKNBl5tokP7IP.eZn93km',
-	'read', 'client_credentials,implicit', 'SYSTEM', 10800, 2592000);
-
--- implicit client for swagger login
-insert into oauth_client_details(client_id, resource_ids, client_secret, scope, authorized_grant_types, authorities, access_token_validity, refresh_token_validity)
-	values ('spring-security-oauth2-read-write-client', 'resource-server-rest-api',
-	/*spring-security-oauth2-read-write-client-password1234*/'$2a$04$soeOR.QFmClXeFIrhJVLWOQxfHjsJLSpWrU1iGxcMGdu.a5hvfY4W',
-	'read,write', 'client_credentials,implicit', 'SYSTEM', 10800, 2592000);
+	values ('wakandagrpc', 'resource-server-rest-api', /*wakandagrpc*/'$2y$08$byB9gh2IvpDLA9p7URsp5OgY0ydCwmKxArUL5Jf4tJShBJW1ZlCI.',
+	'read', 'implicit', 'SYSTEM', 10800, 2592000);
 
 	
 -- 	4 clients for users interaction to share with common scope
