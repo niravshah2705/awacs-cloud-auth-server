@@ -81,7 +81,9 @@ public class CloudGrpcCheckTokenServiceImpl extends GrpcAwacsTokenServiceImplBas
 				.setExp(exp)
 				.setWhoami(gRPCServerName)	// discovery ??
 				.build();
-
+		
+		logger.debug("check_token login success from grpc proc");
+		
 		responseObserver.onNext(reply);
 		responseObserver.onCompleted();
 	}
