@@ -255,8 +255,8 @@ ERROR:
   Code: PermissionDenied
   Message: Access denied
   
-```  
 ```
+
 ### GRPC Successful checkToken implicit call example 
 
 - Note that prerequisite get Token from REST - (postman), then use wakandagrpc:wakandagrpc basic auth which is a SYSTEM user with implicit authority
@@ -296,7 +296,9 @@ localhost:9345 com.aiocdawacs.boot.grpc.interface.GrpcAwacsTokenService/CheckTok
 }
 
 ```
+
 ### Health Indicator
+
 
 ```
 package com.aiocdwacs.awacscloudauthserver.actuator;
@@ -338,17 +340,16 @@ public class GrpcHealthIndicatorEndpoint implements HealthIndicator {
 ```
 
 ### Health check (nutshell) -
+
 ```
 $ grpcurl --plaintext localhost:9345 grpc.health.v1.Health/Check
 {
   "status": "SERVING"
 }
 ```
+
 ### Actuator Health check
 
-```
-
-```
 
 
 Third, clients part. Tomorrow!
