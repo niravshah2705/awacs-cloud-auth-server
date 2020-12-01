@@ -320,38 +320,14 @@ curl -kSs -X GET -u neo:neo https://app.awacscloud.tech/authserver/api/users/me 
 }
 ```
 
-### In nutshell, product service internally calls again to authserver on /check_token this way to confirm the authenticity of a token being valid
+### In nutshell, product service will do internally stub call with authserver on grpc check_token this way to confirm the authenticity of a token being valid
+```
+grpcurl --rpc-header "Authorization: Basic YWRtaW46YWRtaW4xMjM0" --plaintext -d "{\"token\": \"tokenvalue\"}" authserver:9345 com.aiocdawacs.boot.grpc.interface.GrpcAwacsTokenService/CheckToken
+```
+### See GRPC Implementation
+v2.0
+|- GRPC.md
 
-```
-curl -kSs -X GET -u SYSTEM!ClientId:SYSTEM!ClientSecret https://app.awacscloud.tech/authserver/oauth/check_token?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsicmVzb3VyY2Utc2VydmVyLXJlc3QtYXBpIl0sInVzZXJfbmFtZSI6ImFkbWluIiwic2NvcGUiOlsicmVhZCIsIndyaXRlIl0sImV4cCI6MTYwNjIyODY3NSwiYXV0aG9yaXRpZXMiOlsiU1lTVEVNIiwib3JkZXJfcmVhZCIsIm9yZGVyX2NyZWF0ZSIsInByb2R1Y3RfdXBkYXRlIiwib3JkZXJfZGVsZXRlIiwicm9sZV9wcm9kdWN0X29yZGVyX3JlYWRlciIsIlVTRVIiLCJvcmRlcl91cGRhdGUiLCJwcm9kdWN0X3JlYWQiLCJwcm9kdWN0X2NyZWF0ZSIsInByb2R1Y3RfZGVsZXRlIl0sImp0aSI6ImRjNzRhOTBjLWNiYzUtNDNmZi04ZTg3LWE0OWJhMTcwMzA3OSIsImNsaWVudF9pZCI6InRyaW5pdHkifQ.2Y3fs8IzWSQvGyFWVgCfv1aNCd4dAm2gnF4LvnX3xf0 | json_pp
-{
-   "aud" : [
-      "resource-server-rest-api"
-   ],
-   "jti" : "dc74a90c-cbc5-43ff-8e87-a49ba1703079",
-   "authorities" : [
-      "SYSTEM",
-      "order_read",
-      "order_create",
-      "product_update",
-      "order_delete",
-      "role_product_order_reader",
-      "USER",
-      "order_update",
-      "product_read",
-      "product_create",
-      "product_delete"
-   ],
-   "scope" : [
-      "read",
-      "write"
-   ],
-   "active" : true,
-   "user_name" : "admin",
-   "client_id" : "trinity",
-   "exp" : 1606228675
-}
-```
 
 #### CSP Report Endpoint Incident payload (No notification release so far just a stackdriver warn logging)
 ```sh

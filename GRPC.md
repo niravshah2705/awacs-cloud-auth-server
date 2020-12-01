@@ -1,60 +1,4 @@
-### Three parts, an interface, a server part and a clients part
-
-### An Interface (maven settings)
-```
-<dependency>
-  <groupId>com.aiocdawacs</groupId>
-  <artifactId>awacs-grpc-interface</artifactId>
-  <version>1.0.25.M2</version>
-</dependency>
-
-```
-
-### Google Proto Definition
-```
-giris@DESKTOP-45UA338 MINGW64 /d/aiocd-workspace/java-workspace/awacs-cloud-commons/awacs-grpc-interface (master)
-$ cat src/main/proto/check_token.proto
-syntax = "proto3";
-
-package com.aiocdawacs.boot.grpc.interface;
-
-option java_multiple_files = true;
-option java_package = "com.aiocdawacs.boot.grpc.lib";
-option java_outer_classname = "GrpcAwacsTokenServiceProto";
-
-import "google/protobuf/timestamp.proto";
-
-service GrpcAwacsTokenService {
-
-    rpc CheckToken (CheckTokenRequest)
-        returns (CheckTokenReply) {
-
-        }
-}
-
-message CheckTokenRequest {
-    string token = 1;
-}
-
-message CheckTokenReply {
-  string username = 1;
-  bool approved = 2;
-  string client_id = 3;
-  Authority authorities = 4;
-  Scope scope = 5;
-  google.protobuf.Timestamp exp = 6;
-  string whoami = 7;
-}
-
-message Scope {
-  repeated string scope = 1;
-}
-message Authority {
-   repeated string authority = 1;
-}
-```
-
-### Second, a server part (Configuration) 
+### Configuration
 
 ```
 
@@ -65,7 +9,7 @@ grpc.client.inProcess.address=in-process:check_token
 
 ```
 
-### Init logs 
+### Init logs
 
 ```
 2020-11-30 19:52:47.287  INFO 36248 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8100 (http) with context path ''
@@ -79,29 +23,17 @@ grpc.client.inProcess.address=in-process:check_token
 ### Authentication code with spring security
 
 ```
-package com.aiocdwacs.awacscloudauthserver.config;
-
-import java.util.concurrent.TimeUnit;
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
-import io.grpc.netty.shaded.io.grpc.netty.NettyServerBuilder;
-import net.devh.boot.grpc.server.security.authentication.BasicGrpcAuthenticationReader;
-import net.devh.boot.grpc.server.security.authentication.GrpcAuthenticationReader;
-import net.devh.boot.grpc.server.serverfactory.GrpcServerConfigurer;
-
 @Configuration
 public class GrpcServerConfig {
 
-	@Bean 
+	@Bean
 	public GrpcAuthenticationReader grpcAuthenticationReader() {
 		return new BasicGrpcAuthenticationReader();
 	}
-	
+
 	@Bean
 	public GrpcServerConfigurer keepAliveServerConfigurer() {
-		
+
 	    return serverBuilder -> {
 	        if (serverBuilder instanceof NettyServerBuilder) {
 	            ((NettyServerBuilder) serverBuilder)
@@ -111,7 +43,7 @@ public class GrpcServerConfig {
 	        }
 	    };
 	}
-	
+
 }
 
 ```
@@ -121,7 +53,6 @@ public class GrpcServerConfig {
 ```
 package com.aiocdwacs.awacscloudauthserver.service;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -151,7 +82,7 @@ public class CloudGrpcCheckTokenServiceImpl extends GrpcAwacsTokenServiceImplBas
 
 	@Value("${grpc.server.in-process-name}")
 	private String gRPCServerName;
-	
+
 	enum FrameworkParams {
 		client_id, authorities, user_name, aud, jti, scope, active, exp
 	}
@@ -166,7 +97,7 @@ public class CloudGrpcCheckTokenServiceImpl extends GrpcAwacsTokenServiceImplBas
 
 	@SuppressWarnings("unchecked")
 	@Override
-	@PreAuthorize("hasAuthority('implicit')" )
+	@PreAuthorize("hasRole('IMPLICIT')")
 	public void checkToken(CheckTokenRequest request, StreamObserver<CheckTokenReply> responseObserver) {
 
 		logger.info("gRPC call for checkToken invoked ");
@@ -185,36 +116,27 @@ public class CloudGrpcCheckTokenServiceImpl extends GrpcAwacsTokenServiceImplBas
 
 		Map<String, Object> response = (Map<String, Object>) accessTokenConverter.convertAccessToken(token, authentication);
 
-		Long millis  	   = (Long)response.get(FrameworkParams.exp.name());
-		Timestamp exp      = Timestamp.newBuilder().setSeconds(millis / 1000).setNanos((int) ((millis % 1000) * 1000000)).build();
-
 		String clientId    = (String)response.get(FrameworkParams.client_id.name());
 		String userName    = (String)response.get(FrameworkParams.user_name.name());
-				
-		Boolean isActive   = null == response.get(FrameworkParams.active.name()) ? Boolean.TRUE: Boolean.FALSE;
+		Timestamp exp      = (Timestamp)response.get(FrameworkParams.exp.name());
+		Boolean isActive   = (Boolean)response.get(FrameworkParams.active.name());
 
 		CheckTokenReply reply = CheckTokenReply.newBuilder()
 				.setApproved(isActive)
 				.setUsername(userName)
-				.setAuthorities(Authority.newBuilder().addAllAuthority((List<String>) response.get(FrameworkParams.authorities.name())).build())
+				.setAuthorities(Authority.newBuilder().addAllAuthority((Set<String>) response.get(FrameworkParams.authorities.name())).build())
 				.setClientId(clientId)
 				.setScope(Scope.newBuilder().addAllScope((Set<String>) response.get(FrameworkParams.scope.name())).build())
 				.setExp(exp)
 				.setWhoami(gRPCServerName)	// discovery ??
 				.build();
-		
-		logger.debug("check_token login success from grpc proc");
-		
+
 		responseObserver.onNext(reply);
 		responseObserver.onCompleted();
 	}
+
 }
 
-```
-### CLI to work with gRPC comm 
-```
-https://github.com/fullstorydev/grpcurl/releases/tag/v1.7.0
-export PATH=$PATH;/path/to/grpcurl
 
 ### Health checks
 ```
@@ -256,20 +178,19 @@ public class GrpcHealthIndicatorEndpoint implements HealthIndicator {
 
 ```
 
-### Health check demo - 
+### Health check  -
 ```
+$ grpcurl --plaintext localhost:9345 grpc.health.v1.Health/Check
+{
+  "status": "SERVING"
+}
 ```
-
-### and
-```
-```
-### Actuator Health check 
-```
-```
+### Actuator Health check
 
 ```
 
-### GRPC Describe service 
+```
+### GRPC Describe service
 
 ```
 $ grpcurl --plaintext localhost:9345 describe
@@ -305,16 +226,15 @@ C:\Users\giris>grpcurl --rpc-header "Authorization: Basic YWRtaW46YWRtaW4xMjM0" 
 ERROR:
   Code: PermissionDenied
   Message: Access denied
-```  
+  
+```
 
-### GRPC Successful checkToken implicit call example 
-prerequisite get Token from REST - (postman), then use wakandagrpc:wakandagrpc basic auth which is a SYSTEM user with implicit authority
+### GRPC Successful checkToken implicit call example
+Get Token from REST - (postman), then use wakandagrpc:wakandagrpc basic auth
 
 ```
-grpcurl --rpc-header "Authorization: Basic d2FrYW5kYWdycGM6d2FrYW5kYWdycGM=" --plaintext \ 
--d "{\"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsicmVzb3VyY2Utc2VydmVyLXJlc3QtYXBpIl0sInVzZXJfbmFtZSI6ImFkbWluIiwic2NvcGUiOlsicmVhZCIsIndyaXRlIl0sImV4cCI6MTYwNjc3NDcxNywiYXV0aG9yaXRpZXMiOlsiU1lTVEVNIiwib3JkZXJfcmVhZCIsIm9yZGVyX2NyZWF0ZSIsInByb2R1Y3RfdXBkYXRlIiwib3JkZXJfZGVsZXRlIiwicm9sZV9wcm9kdWN0X29yZGVyX3JlYWRlciIsIlVTRVIiLCJvcmRlcl91cGRhdGUiLCJwcm9kdWN0X3JlYWQiLCJwcm9kdWN0X2NyZWF0ZSIsInByb2R1Y3RfZGVsZXRlIl0sImp0aSI6IjAzZTc5ZTllLTJhOWItNGU2Ny04ZTg0LWVjZDZmNTk2YzY3ZCIsImNsaWVudF9pZCI6Im5lbyJ9.oe73_ypVF3OnslNzlgbcRj4ScnmeaIOB992DKtCeayo\"}"\
-localhost:9345 com.aiocdawacs.boot.grpc.interface.GrpcAwacsTokenService/CheckToken
- 
+grpcurl --rpc-header "Authorization: Basic d2FrYW5kYWdycGM6d2FrYW5kYWdycGM=" --plaintext -d "{\"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsicmVzb3VyY2Utc2VydmVyLXJlc3QtYXBpIl0sInVzZXJfbmFtZSI6ImFkbWluIiwic2NvcGUiOlsicmVhZCIsIndyaXRlIl0sImV4cCI6MTYwNjc3NDcxNywiYXV0aG9yaXRpZXMiOlsiU1lTVEVNIiwib3JkZXJfcmVhZCIsIm9yZGVyX2NyZWF0ZSIsInByb2R1Y3RfdXBkYXRlIiwib3JkZXJfZGVsZXRlIiwicm9sZV9wcm9kdWN0X29yZGVyX3JlYWRlciIsIlVTRVIiLCJvcmRlcl91cGRhdGUiLCJwcm9kdWN0X3JlYWQiLCJwcm9kdWN0X2NyZWF0ZSIsInByb2R1Y3RfZGVsZXRlIl0sImp0aSI6IjAzZTc5ZTllLTJhOWItNGU2Ny04ZTg0LWVjZDZmNTk2YzY3ZCIsImNsaWVudF9pZCI6Im5lbyJ9.oe73_ypVF3OnslNzlgbcRj4ScnmeaIOB992DKtCeayo\"}" localhost:9345 com.aiocdawacs.boot.grpc.interface.GrpcAwacsTokenService/CheckToken
+
 {
   "username": "admin",
   "approved": true,
@@ -345,4 +265,3 @@ localhost:9345 com.aiocdawacs.boot.grpc.interface.GrpcAwacsTokenService/CheckTok
 }
 
 ```
-Third, clients part. Tomorrow!
