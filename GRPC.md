@@ -250,14 +250,16 @@ grpc.reflection.v1alpha.ServerReflection
 ### GRPC Login (with role other than 'implicit')
 
 ```
-C:\Users\giris>grpcurl --rpc-header "Authorization: Basic YWRtaW46YWRtaW4xMjM0" --plaintext -d "{\"token\": \"tokenvalue\"}" localhost:9345 com.aiocdawacs.boot.grpc.interface.GrpcAwacsTokenService/CheckToken
+$ grpcurl --rpc-header "Authorization: Basic YWRtaW46YWRtaW4xMjM0" --plaintext -d "{\"token\": \"tokenvalue\"}" localhost:9345 com.aiocdawacs.boot.grpc.interface.GrpcAwacsTokenService/CheckToken
 ERROR:
   Code: PermissionDenied
   Message: Access denied
+  
 ```  
-
+```
 ### GRPC Successful checkToken implicit call example 
-prerequisite get Token from REST - (postman), then use wakandagrpc:wakandagrpc basic auth which is a SYSTEM user with implicit authority
+
+- Note that prerequisite get Token from REST - (postman), then use wakandagrpc:wakandagrpc basic auth which is a SYSTEM user with implicit authority
 
 ```
 grpcurl --rpc-header "Authorization: Basic d2FrYW5kYWdycGM6d2FrYW5kYWdycGM=" --plaintext \ 
@@ -294,4 +296,59 @@ localhost:9345 com.aiocdawacs.boot.grpc.interface.GrpcAwacsTokenService/CheckTok
 }
 
 ```
+### Health Indicator
+
+```
+package com.aiocdwacs.awacscloudauthserver.actuator;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.endpoint.web.annotation.RestControllerEndpoint;
+import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.actuate.health.HealthIndicator;
+
+import io.grpc.health.v1.HealthCheckRequest;
+import io.grpc.health.v1.HealthCheckResponse.ServingStatus;
+import io.grpc.health.v1.HealthGrpc.HealthBlockingStub;
+import io.grpc.services.HealthStatusManager;
+
+@RestControllerEndpoint(id = "grpc")
+public class GrpcHealthIndicatorEndpoint implements HealthIndicator {
+
+	@Autowired
+	HealthBlockingStub health;
+
+	@Override
+	public Health health() {
+		HealthCheckRequest grpcHealth = HealthCheckRequest.newBuilder()
+				.setService(HealthStatusManager.SERVICE_NAME_ALL_SERVICES).build();
+
+		ServingStatus status = health.check(grpcHealth).getStatus();
+
+		switch (status) {
+		case SERVING:
+			return Health.up().build();
+		case NOT_SERVING:
+		default:
+			return Health.down().build();
+
+		}
+	}
+}
+
+```
+
+### Health check (nutshell) -
+```
+$ grpcurl --plaintext localhost:9345 grpc.health.v1.Health/Check
+{
+  "status": "SERVING"
+}
+```
+### Actuator Health check
+
+```
+
+```
+
+
 Third, clients part. Tomorrow!
