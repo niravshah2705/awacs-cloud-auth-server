@@ -352,3 +352,18 @@ $ grpcurl --plaintext localhost:9345 grpc.health.v1.Health/Check
 
 
 Third, clients part. Tomorrow!
+
+1. Maven add -  
+
+```
+	<dependency>
+            <groupId>com.aiocdawacs</groupId>
+            <artifactId>awacs-grpc-interface</artifactId>
+            <version>${awacs-commons-version}</version>
+        </dependency>
+		<dependency>
+            <groupId>net.devh</groupId>
+            <artifactId>grpc-client-spring-boot-starter</artifactId>
+        </dependency>
+		
+```		
