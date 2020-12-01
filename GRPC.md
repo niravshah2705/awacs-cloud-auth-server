@@ -137,8 +137,9 @@ public class CloudGrpcCheckTokenServiceImpl extends GrpcAwacsTokenServiceImplBas
 
 }
 
-
+```
 ### Health checks
+
 ```
 package com.aiocdwacs.awacscloudauthserver.actuator;
 

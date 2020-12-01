@@ -326,7 +326,7 @@ grpcurl --rpc-header "Authorization: Basic YWRtaW46YWRtaW4xMjM0" --plaintext -d 
 ```
 ### See GRPC Implementation
 v2.0
-|- GRPC.md
+|-- ![GRPC.md](https://github.com/girishaiocdawacs/awacs-cloud-auth-server/blob/master/GRPC.md)
 
 
 #### CSP Report Endpoint Incident payload (No notification release so far just a stackdriver warn logging)
