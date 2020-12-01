@@ -9,5 +9,5 @@ ENV GOOGLE_APPLICATION_CREDENTIALS="/keys.json"
 ENV SPRING_PROFILES_ACTIVE=prod
 ENV PORT=80
 EXPOSE 80
-EXPOSE 9345 
+EXPOSE 9345/udp
 ENTRYPOINT ["java","-Dspring.profiles.active=prod", "-jar","/app.jar"]
