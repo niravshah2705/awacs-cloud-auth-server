@@ -30,7 +30,7 @@
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<spring-cloud.version>Hoxton.SR9</spring-cloud.version>
 		<spring-cloud-gcp.version>1.2.6.RELEASE</spring-cloud-gcp.version>
-		<awacs-commons-version>1.0.25.M2</awacs-commons-version>
+		<awacs-commons-version>1.0.25.M3</awacs-commons-version>
 	</properties>
 
 	<dependencies>
@@ -69,7 +69,7 @@
             <version>2.10.1.RELEASE</version>
         </dependency>
 
-        
+
 		<dependency>
 			<groupId>org.hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>

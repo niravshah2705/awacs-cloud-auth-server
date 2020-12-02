@@ -66,7 +66,8 @@ public class CloudGrpcCheckTokenServiceImpl extends GrpcAwacsTokenServiceImplBas
 
 		Long millis  	   = (Long)response.get(FrameworkParams.exp.name());
 		Timestamp exp      = Timestamp.newBuilder().setSeconds(millis / 1000).setNanos((int) ((millis % 1000) * 1000000)).build();
-
+		String resourceId  = (String)response.get(FrameworkParams.aud.name());
+		String jti		   = (String)response.get(FrameworkParams.jti.name());	// UUID.randomUUID().toString();
 		String clientId    = (String)response.get(FrameworkParams.client_id.name());
 		String userName    = (String)response.get(FrameworkParams.user_name.name());
 				
@@ -74,6 +75,8 @@ public class CloudGrpcCheckTokenServiceImpl extends GrpcAwacsTokenServiceImplBas
 
 		CheckTokenReply reply = CheckTokenReply.newBuilder()
 				.setApproved(isActive)
+				.setAud(resourceId)
+				.setJti(jti)
 				.setUsername(userName)
 				.setAuthorities(Authority.newBuilder().addAllAuthority((List<String>) response.get(FrameworkParams.authorities.name())).build())
 				.setClientId(clientId)
