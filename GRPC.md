@@ -250,7 +250,7 @@ grpc.reflection.v1alpha.ServerReflection
 ### GRPC Login (with role other than 'implicit')
 
 ```
-$ grpcurl --rpc-header "Authorization: Basic YWRtaW46YWRtaW4xMjM0" --plaintext -d "{\"token\": \"tokenvalue\"}" localhost:9345 com.aiocdawacs.boot.grpc.interface.GrpcAwacsTokenService/CheckToken
+$ grpcurl --rpc-header "Authorization: Basic d2FrYW5kYWdycGM6d2FrYW5kYWdycGM=" --plaintext -d "{\"token\": \"tokenvalue\"}" localhost:9345 com.aiocdawacs.boot.grpc.interface.GrpcAwacsTokenService/CheckToken
 ERROR:
   Code: PermissionDenied
   Message: Access denied
@@ -262,10 +262,7 @@ ERROR:
 - Note that prerequisite get Token from REST - (postman), then use wakandagrpc:wakandagrpc basic auth which is a SYSTEM user with implicit authority
 
 ```
-grpcurl --rpc-header "Authorization: Basic d2FrYW5kYWdycGM6d2FrYW5kYWdycGM=" --plaintext \ 
--d "{\"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsicmVzb3VyY2Utc2VydmVyLXJlc3QtYXBpIl0sInVzZXJfbmFtZSI6ImFkbWluIiwic2NvcGUiOlsicmVhZCIsIndyaXRlIl0sImV4cCI6MTYwNjc3NDcxNywiYXV0aG9yaXRpZXMiOlsiU1lTVEVNIiwib3JkZXJfcmVhZCIsIm9yZGVyX2NyZWF0ZSIsInByb2R1Y3RfdXBkYXRlIiwib3JkZXJfZGVsZXRlIiwicm9sZV9wcm9kdWN0X29yZGVyX3JlYWRlciIsIlVTRVIiLCJvcmRlcl91cGRhdGUiLCJwcm9kdWN0X3JlYWQiLCJwcm9kdWN0X2NyZWF0ZSIsInByb2R1Y3RfZGVsZXRlIl0sImp0aSI6IjAzZTc5ZTllLTJhOWItNGU2Ny04ZTg0LWVjZDZmNTk2YzY3ZCIsImNsaWVudF9pZCI6Im5lbyJ9.oe73_ypVF3OnslNzlgbcRj4ScnmeaIOB992DKtCeayo\"}"\
-localhost:9345 com.aiocdawacs.boot.grpc.interface.GrpcAwacsTokenService/CheckToken
- 
+grpcurl --rpc-header "Authorization: Basic d2FrYW5kYWdycGM6d2FrYW5kYWdycGM=" --plaintext -d "{\"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsicmVzb3VyY2Utc2VydmVyLXJlc3QtYXBpIl0sInVzZXJfbmFtZSI6ImFkbWluIiwic2NvcGUiOlsicmVhZCIsIndyaXRlIl0sImV4cCI6MTYwNjkyNTc4NCwiYXV0aG9yaXRpZXMiOlsiU1lTVEVNIiwib3JkZXJfcmVhZCIsIm9yZGVyX2NyZWF0ZSIsInByb2R1Y3RfdXBkYXRlIiwib3JkZXJfZGVsZXRlIiwicm9sZV9wcm9kdWN0X29yZGVyX3JlYWRlciIsIlVTRVIiLCJvcmRlcl91cGRhdGUiLCJwcm9kdWN0X3JlYWQiLCJwcm9kdWN0X2NyZWF0ZSIsInByb2R1Y3RfZGVsZXRlIl0sImp0aSI6IjgzMTk2ZThiLTFiZDUtNGI4MS05ZWNhLWYwNzI0ODAyZWE0OCIsImNsaWVudF9pZCI6Im5lbyJ9.C9B57f3hgl7JE0ZCBvFiQKPAUQk0ZFE2OnKJmD6VPb8\"}" localhost:9345 com.aiocdawacs.boot.grpc.interface.GrpcAwacsTokenService/CheckToken
 {
   "username": "admin",
   "approved": true,
@@ -291,9 +288,12 @@ localhost:9345 com.aiocdawacs.boot.grpc.interface.GrpcAwacsTokenService/CheckTok
       "write"
     ]
   },
-  "exp": "1970-01-19T14:19:34.717Z",
-  "whoami": "check_token"
-}
+  "exp": "2020-12-02T21:46:43.208Z",
+  "whoami": "check_token",
+  "aud": [
+    "resource-server-rest-api"
+  ],
+  "jti": "83196e8b-1bd5-4b81-9eca-f0724802ea48"
 
 ```
 

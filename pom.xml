@@ -30,7 +30,8 @@
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<spring-cloud.version>Hoxton.SR9</spring-cloud.version>
 		<spring-cloud-gcp.version>1.2.6.RELEASE</spring-cloud-gcp.version>
-		<awacs-commons-version>1.0.25.M3</awacs-commons-version>
+		<io.grpc.version>1.33.1</io.grpc.version>
+		<awacs-commons-version>1.0.25.M4</awacs-commons-version>
 	</properties>
 
 	<dependencies>
@@ -64,11 +65,22 @@
 			<version>2.3.0</version>
 		</dependency>
 		<dependency>
-            <groupId>net.devh</groupId>
-            <artifactId>grpc-server-spring-boot-starter</artifactId>
-            <version>2.10.1.RELEASE</version>
-        </dependency>
+			<groupId>net.devh</groupId>
+			<artifactId>grpc-server-spring-boot-starter</artifactId>
+			<version>2.10.1.RELEASE</version>
+			<exclusions>
+				<exclusion>
+					<groupId>io.grpc</groupId>
+					<artifactId>grpc-netty-shaded</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 
+		<dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-netty</artifactId>
+			<version>${io.grpc.version}</version><!--$NO-MVN-MAN-VER$-->
+		</dependency>
 
 		<dependency>
 			<groupId>org.hsqldb</groupId>
@@ -82,11 +94,11 @@
 			<scope>runtime</scope>
 		</dependency>
 
-        <dependency>
-            <groupId>com.aiocdawacs</groupId>
-            <artifactId>awacs-grpc-interface</artifactId>
-            <version>${awacs-commons-version}</version>
-        </dependency>
+		<dependency>
+			<groupId>com.aiocdawacs</groupId>
+			<artifactId>awacs-grpc-interface</artifactId>
+			<version>${awacs-commons-version}</version>
+		</dependency>
 		<dependency>
 			<groupId>com.aiocdawacs</groupId>
 			<artifactId>cloud-event-publisher-gcp-pubsub</artifactId>

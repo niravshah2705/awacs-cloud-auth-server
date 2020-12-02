@@ -14,6 +14,8 @@ import org.springframework.security.oauth2.common.exceptions.InvalidTokenExcepti
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.AccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
+import org.threeten.bp.LocalDateTime;
+import org.threeten.bp.ZoneOffset;
 
 import com.aiocdawacs.boot.grpc.lib.Authority;
 import com.aiocdawacs.boot.grpc.lib.CheckTokenReply;
@@ -64,18 +66,22 @@ public class CloudGrpcCheckTokenServiceImpl extends GrpcAwacsTokenServiceImplBas
 
 		Map<String, Object> response = (Map<String, Object>) accessTokenConverter.convertAccessToken(token, authentication);
 
-		Long millis  	   = (Long)response.get(FrameworkParams.exp.name());
+		//DefaultOAuth2AccessToken result = new DefaultOAuth2AccessToken(token);
+		
+		Long millis  	   = LocalDateTime.now().plusHours(3).toInstant(ZoneOffset.UTC).toEpochMilli();	// there is an issue with response timestamp
 		Timestamp exp      = Timestamp.newBuilder().setSeconds(millis / 1000).setNanos((int) ((millis % 1000) * 1000000)).build();
-		String resourceId  = (String)response.get(FrameworkParams.aud.name());
+		Set<String> resourceIds     = (Set)response.get(FrameworkParams.aud.name());
 		String jti		   = (String)response.get(FrameworkParams.jti.name());	// UUID.randomUUID().toString();
 		String clientId    = (String)response.get(FrameworkParams.client_id.name());
 		String userName    = (String)response.get(FrameworkParams.user_name.name());
 				
+		final String resourceName  = resourceIds.iterator().hasNext()? (String) resourceIds.iterator().next() : "Missing aud";
+		
 		Boolean isActive   = null == response.get(FrameworkParams.active.name()) ? Boolean.TRUE: Boolean.FALSE;
 
 		CheckTokenReply reply = CheckTokenReply.newBuilder()
 				.setApproved(isActive)
-				.setAud(resourceId)
+				.addAud(resourceName)
 				.setJti(jti)
 				.setUsername(userName)
 				.setAuthorities(Authority.newBuilder().addAllAuthority((List<String>) response.get(FrameworkParams.authorities.name())).build())
