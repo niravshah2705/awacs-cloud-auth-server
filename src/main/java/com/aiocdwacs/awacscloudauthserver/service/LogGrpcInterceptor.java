@@ -1,5 +1,7 @@
 package com.aiocdwacs.awacscloudauthserver.service;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,8 +17,9 @@ public class LogGrpcInterceptor implements ServerInterceptor {
 	@Override
 	public <ReqT, RespT> ServerCall.Listener<ReqT> interceptCall(ServerCall<ReqT, RespT> call, Metadata headers,
 			ServerCallHandler<ReqT, RespT> next) {
-		log.info(call.getMethodDescriptor().getFullMethodName());
-		log.info("method security - "+ Boolean.toString(call.getMethodDescriptor().isSafe()));
+		log.info(ToStringBuilder.reflectionToString(call, ToStringStyle.NO_CLASS_NAME_STYLE));
+		log.info(ToStringBuilder.reflectionToString(headers, ToStringStyle.NO_CLASS_NAME_STYLE));
+		log.info(ToStringBuilder.reflectionToString(next, ToStringStyle.NO_CLASS_NAME_STYLE));
 		return next.startCall(call, headers);
 	}
 }

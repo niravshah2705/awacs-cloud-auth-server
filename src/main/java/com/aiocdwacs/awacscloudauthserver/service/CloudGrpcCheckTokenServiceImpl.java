@@ -7,7 +7,6 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
@@ -17,11 +16,9 @@ import org.springframework.security.oauth2.provider.token.ResourceServerTokenSer
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.ZoneOffset;
 
-import com.aiocdawacs.boot.grpc.lib.Authority;
 import com.aiocdawacs.boot.grpc.lib.CheckTokenReply;
 import com.aiocdawacs.boot.grpc.lib.CheckTokenRequest;
 import com.aiocdawacs.boot.grpc.lib.GrpcAwacsTokenServiceGrpc.GrpcAwacsTokenServiceImplBase;
-import com.aiocdawacs.boot.grpc.lib.Scope;
 import com.google.protobuf.Timestamp;
 
 import io.grpc.stub.StreamObserver;
@@ -29,9 +26,6 @@ import net.devh.boot.grpc.server.service.GrpcService;
 
 @GrpcService(interceptors = { LogGrpcInterceptor.class })
 public class CloudGrpcCheckTokenServiceImpl extends GrpcAwacsTokenServiceImplBase {
-
-	@Value("${grpc.server.in-process-name}")
-	private String gRPCServerName;
 
 	enum FrameworkParams {
 		client_id, authorities, user_name, aud, jti, scope, active, exp
@@ -82,14 +76,13 @@ public class CloudGrpcCheckTokenServiceImpl extends GrpcAwacsTokenServiceImplBas
 
 		Boolean isActive = null == response.get(FrameworkParams.active.name()) ? Boolean.TRUE : Boolean.FALSE;
 
-		CheckTokenReply reply = CheckTokenReply.newBuilder().setApproved(isActive).addAud(resourceName).setJti(jti)
-				.setUsername(userName)
-				.setAuthorities(Authority.newBuilder()
-						.addAllAuthority((List<String>) response.get(FrameworkParams.authorities.name())).build())
+		CheckTokenReply reply = CheckTokenReply.newBuilder().setActive(isActive)
+				.addAud(resourceName).setJti(jti)
+				.setUserName(userName)
+				.addAllAuthorities((List<String>) response.get(FrameworkParams.authorities.name()))
 				.setClientId(clientId)
-				.setScope(Scope.newBuilder().addAllScope((Set<String>) response.get(FrameworkParams.scope.name()))
-						.build())
-				.setExp(exp).setWhoami(gRPCServerName) // discovery ??
+				.addAllScope((Set<String>) response.get(FrameworkParams.scope.name()))
+				.setExp(exp).setWhoami("wakandagrpc") // discovery ??
 				.build();
 
 		logger.debug("check_token login success from grpc proc by ("+request.getSource()+")");
