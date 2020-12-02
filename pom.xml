@@ -31,7 +31,7 @@
 		<spring-cloud.version>Hoxton.SR9</spring-cloud.version>
 		<spring-cloud-gcp.version>1.2.6.RELEASE</spring-cloud-gcp.version>
 		<io.grpc.version>1.33.1</io.grpc.version>
-		<awacs-commons-version>1.0.25.M4</awacs-commons-version>
+		<awacs-commons-version>1.0.25.M5</awacs-commons-version>
 	</properties>
 
 	<dependencies>
