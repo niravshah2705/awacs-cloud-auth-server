@@ -52,6 +52,8 @@ class UserController {
 			+ "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$" 
 			+ "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$";
 
+	private static final String AADHAR_PATTERN = "^[2-9]{1}[0-9]{3}\\s[0-9]{4}\\s[0-9]{4}$";
+
 	private final UserRepository repository;
 	private TokenStore tokenStore;
 	private final PasswordEncoder passwordEncoder;
@@ -122,8 +124,16 @@ class UserController {
 				}else {
 					throw new InvalidPhoneFormatException("Invalid phone: "+res.getMsisdn());
 				}
-
 			}
+
+			if(Objects.nonNull(res.getAadhar())) {
+				if(Pattern.matches(AADHAR_PATTERN, res.getAadhar())) {
+					userToSave.setAadhar(res.getAadhar());
+				}else {
+					throw new InvalidPhoneFormatException("Invalid aadhar: "+res.getAadhar());
+				}
+			}
+
 			if(Objects.nonNull(res.getPassword())) {
 				userToSave.setPassword(passwordEncoder.encode(res.getPassword()));
 			}
@@ -203,6 +213,22 @@ class UserController {
 		}
 	}
 
+
+
+	@PutMapping("/{id}/aiocd/change/uidai-aadhar")
+	@PreAuthorize("hasAuthority('SYSTEM')")
+	void changeAadhar(@PathVariable Long id, @RequestParam String newAadhar) throws UserPrincipalNotFoundException, AadharNotFoundException {
+		User user = repository.findById(id).orElseThrow(() -> new UserPrincipalNotFoundException("id="+id));
+
+		if(Objects.nonNull(newAadhar)) {
+			if(Pattern.matches(AADHAR_PATTERN, newAadhar)) {
+				user.setAadhar(newAadhar);
+				repository.save(user);
+			}else {
+				throw new AadharNotFoundException("old password doesn't match");
+			}
+		}
+	}
 
 
 	@ExceptionHandler(InvalidPhoneFormatException.class)

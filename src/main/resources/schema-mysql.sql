@@ -88,6 +88,7 @@ create table awacs_user (
   msisdn varchar(255) default null,
   user_name varchar(255) default null,
   password varchar(255) default null,
+  aadhar varchar (255) default null,
   account_expired tinyint(1) default null,
   account_locked tinyint(1) default null,
   credentials_expired tinyint(1) default null,
@@ -100,7 +101,7 @@ create table awacs_user (
   unique key user_msisdn (msisdn)
 );
 
-alter table awacs_user add constraint user_username_email_msisdn unique(user_name, email, msisdn);
+alter table awacs_user add constraint user_username_email_msisdn unique(user_name, email, msisdn, aadhar);
 
 create table users_authorities (
    user_id bigint not null auto_increment,

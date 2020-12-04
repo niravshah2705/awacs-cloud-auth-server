@@ -42,6 +42,9 @@ public class User implements UserDetails, Serializable {
 	@Column(name = "msisdn")
 	private String msisdn;
 	
+	@Column(name = "aadhar")
+	private String aadhar;
+	
 	@Column(name = "password")
 	private String password;
 
@@ -131,6 +134,15 @@ public class User implements UserDetails, Serializable {
 
 	public void setAuthorities(Collection<Authority> authorities) {
 		this.authorities = authorities;
+	}
+
+	
+	public String getAadhar() {
+		return aadhar;
+	}
+
+	public void setAadhar(String aadhar) {
+		this.aadhar = aadhar;
 	}
 
 	@Override
