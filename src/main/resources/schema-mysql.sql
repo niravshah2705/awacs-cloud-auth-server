@@ -1,5 +1,5 @@
 drop database awacs_cloud;
-create database awacs_cloud;
+create database awacs_cloud character set utf8 collate utf8mb4;
 use awacs_cloud;
 
 -- set global explicit_defaults_for_timestamp=ON;
@@ -21,7 +21,7 @@ create table oauth_client_details (
   additional_information varchar(4096),
   autoapprove varchar(255),
   created timestamp default CURRENT_TIMESTAMP,
-  updated timestamp default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP 
+  updated timestamp default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP
 );
 
 create table oauth_client_token (
@@ -31,7 +31,7 @@ create table oauth_client_token (
   user_name varchar(255),
   client_id varchar(255),
   created timestamp not null default CURRENT_TIMESTAMP,
-  updated timestamp not null default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP 
+  updated timestamp not null default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP
 );
 
 create table oauth_access_token (
@@ -43,7 +43,7 @@ create table oauth_access_token (
   authentication long varbinary,
   refresh_token varchar(255),
   created timestamp default CURRENT_TIMESTAMP,
-  updated timestamp default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP 
+  updated timestamp default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP
 );
 
 create table oauth_refresh_token (
@@ -51,14 +51,14 @@ create table oauth_refresh_token (
   token long varbinary,
   authentication long varbinary,
   created timestamp default CURRENT_TIMESTAMP,
-  updated timestamp default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP 
+  updated timestamp default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP
 );
 
 create table oauth_code (
   code varchar(255),
   authentication long varbinary,
   created timestamp default CURRENT_TIMESTAMP,
-  updated timestamp default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP 
+  updated timestamp default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP
 );
 
 create table oauth_approvals (
@@ -69,7 +69,7 @@ create table oauth_approvals (
   expiresat timestamp,
   lastmodifiedat timestamp,
   created timestamp default CURRENT_TIMESTAMP,
-  updated timestamp default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP 
+  updated timestamp default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP
 );
 
 create table authority (
@@ -77,7 +77,7 @@ create table authority (
    name varchar(255),
    primary key (id),
    created timestamp default CURRENT_TIMESTAMP,
-   updated timestamp default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP 
+   updated timestamp default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP
 );
 
 alter table authority add constraint authority_name unique(name);
@@ -114,4 +114,3 @@ create table users_authorities (
 alter table users_authorities add constraint users_authorities_authority foreign key (authority_id) references authority(id) on delete cascade;
 
 alter table users_authorities add constraint users_authorities_awacs_user foreign key (user_id) references awacs_user(id) on delete cascade;
-
