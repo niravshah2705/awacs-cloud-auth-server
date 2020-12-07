@@ -1,5 +1,5 @@
 drop database awacs_cloud;
-create database awacs_cloud character set utf8 collate utf8mb4;
+create database awacs_cloud;
 use awacs_cloud;
 
 -- set global explicit_defaults_for_timestamp=ON;
@@ -98,10 +98,12 @@ create table awacs_user (
   primary key (id),
   unique key user_user_name (user_name),
   unique key user_email  (email),
-  unique key user_msisdn (msisdn)
+  unique key user_msisdn (msisdn),
+  unique key user_aadhar (aadhar)
 );
 
-alter table awacs_user add constraint user_username_email_msisdn unique(user_name, email, msisdn, aadhar);
+alter table awacs_user add constraint user_username_email_msisdn unique(user_name, email, msisdn);
+alter table awacs_user add constraint user_username_msisdn_aadhar unique(msisdn, aadhar);
 
 create table users_authorities (
    user_id bigint not null auto_increment,
