@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -40,9 +41,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.aiocdwacs.awacscloudauthserver.model.User;
 import com.aiocdwacs.awacscloudauthserver.repository.UserRepository;
+import com.aiocdwacs.awacscloudauthserver.service.OtpService;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/Users")
 @Validated
 class UserController {
 
@@ -58,6 +60,9 @@ class UserController {
 	private TokenStore tokenStore;
 	private final PasswordEncoder passwordEncoder;
 
+	@Autowired
+	OtpService otpService;
+	
 	UserController(UserRepository repository, PasswordEncoder passwordEncoder, TokenStore tokenStore) {
 		this.repository = repository;
 		this.passwordEncoder = passwordEncoder;
@@ -159,7 +164,7 @@ class UserController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@PostMapping("/temporary/signup")
+	@PostMapping("/SignUp")
 	@PreAuthorize("hasAuthority('SYSTEM')")
 	@ResponseBody ResponseEntity<User> create(@RequestBody User res, HttpServletRequest request) {
 		res.setCreated(LocalDateTime.now());		//known issue
@@ -170,7 +175,7 @@ class UserController {
 		return ResponseEntity.ok(u);
 	}
 
-	@PostMapping("/temporary/logout")
+	@PostMapping("/Logout")
 	@PreAuthorize("hasAuthority('SYSTEM')")
 	public ResponseEntity<Object> revoke(HttpServletRequest request) {
 		try {
@@ -201,7 +206,7 @@ class UserController {
 		}
 	}
 
-	@PutMapping("/{id}/oldpwd/changePassword")
+	@PutMapping("/{id}/oldpwd/ChangePassword")
 	@PreAuthorize("hasAuthority('SYSTEM') || (#oldPassword != null && !#oldPassword.isEmpty() && authentication.principal == @userRepository.findById(#id).orElse(new net.reliqs.gleeometer.users.User()).email)")
 	void changePassword(@PathVariable Long id, @RequestParam(required = false) String oldPassword, @RequestParam String newPassword) throws UserPrincipalNotFoundException, ChangePasswordException {
 		User user = repository.findById(id).orElseThrow(() -> new UserPrincipalNotFoundException("id="+id));
@@ -213,6 +218,30 @@ class UserController {
 		}
 	}
 
+
+	@PutMapping("ChangePassword")
+	@PreAuthorize("hasAuthority('SYSTEM')")
+	void updatePassword(@RequestParam String userName,String newPassword) throws UserPrincipalNotFoundException, ChangePasswordException {
+		User user = repository.findByUsername(userName);
+		if(user!=null) {
+			user.setPassword(passwordEncoder.encode(newPassword));
+			repository.save(user);
+		}else {
+			throw new UserPrincipalNotFoundException("userName="+userName);
+		}
+	}
+	
+	
+	@PostMapping("SendOTP")
+	@PreAuthorize("hasAuthority('USER')")
+	public void sendOneTimePassword(@RequestParam String userName) throws UserPrincipalNotFoundException, ChangePasswordException {
+		User user = repository.findByUsername(userName);
+		if(user!=null) {
+			otpService.sendOneTimePassword(user.getMsisdn(), user.getEmail());
+		}else {
+			throw new UserPrincipalNotFoundException("userName="+userName);
+		}
+	}
 
 
 	@PutMapping("/{id}/aiocd/change/uidai-aadhar")
