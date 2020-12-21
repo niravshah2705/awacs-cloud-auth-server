@@ -57,6 +57,9 @@ public class User implements UserDetails, Serializable {
 	@Column(name = "credentials_expired")
 	private boolean credentialsExpired;
 
+	@Column(name = "confirmation_token")
+	private String confirmationToken;
+	
 	@Column(name = "enabled")
 	private boolean enabled;
 
@@ -191,7 +194,15 @@ public class User implements UserDetails, Serializable {
 	public void setUpdated(LocalDateTime updated) {
 		this.updated = updated;
 	}
+	
+	public String getConfirmationToken() {
+		return confirmationToken;
+	}
 
+	public void setConfirmationToken(String confirmationToken) {
+		this.confirmationToken = confirmationToken;
+	}
+	
 	public User() {
 		super();
 	}
