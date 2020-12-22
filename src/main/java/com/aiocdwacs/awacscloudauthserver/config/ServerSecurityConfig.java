@@ -40,6 +40,7 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
     	super.configure(web);
+    	web.ignoring().antMatchers("/register**", "/confirm**");
         web.ignoring().antMatchers("/actuator/**");
     }
 }

@@ -41,6 +41,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.aiocdwacs.awacscloudauthserver.model.User;
 import com.aiocdwacs.awacscloudauthserver.repository.UserRepository;
+import com.aiocdwacs.awacscloudauthserver.service.EmailService;
 import com.aiocdwacs.awacscloudauthserver.service.OtpService;
 
 @RestController
@@ -62,6 +63,9 @@ class UserController {
 
 	@Autowired
 	OtpService otpService;
+	
+	@Autowired
+	EmailService emailService;
 	
 	UserController(UserRepository repository, PasswordEncoder passwordEncoder, TokenStore tokenStore) {
 		this.repository = repository;
@@ -165,7 +169,6 @@ class UserController {
 	}
 
 	@PostMapping("/SignUp")
-	@PreAuthorize("hasAuthority('SYSTEM')")
 	@ResponseBody ResponseEntity<User> create(@RequestBody User res, HttpServletRequest request) {
 		res.setCreated(LocalDateTime.now());		//known issue
 		res.setUpdated(res.getCreated());
@@ -238,6 +241,7 @@ class UserController {
 		User user = repository.findByUsername(userName);
 		if(user!=null) {
 			otpService.sendOneTimePassword(user.getMsisdn(), user.getEmail());
+			//emailService.sendEmail();
 		}else {
 			throw new UserPrincipalNotFoundException("userName="+userName);
 		}

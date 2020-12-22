@@ -55,8 +55,6 @@ public class RegisterController {
 		// Lookup user in database by e-mail
 		User userExists = userService.findByEmail(user.getEmail());
 
-		System.out.println(userExists);
-
 		if (userExists != null) {
 			modelAndView.addObject("alreadyRegisteredMessage", "Oops!  There is already a user registered with the email provided.");
 			modelAndView.setViewName("register");
