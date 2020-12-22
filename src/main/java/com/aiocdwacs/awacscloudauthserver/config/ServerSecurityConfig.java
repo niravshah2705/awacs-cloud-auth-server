@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.client.RestTemplate;
 
 @Configuration
 @EnableWebSecurity
@@ -42,5 +43,10 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
     	super.configure(web);
     	web.ignoring().antMatchers("/register**", "/confirm**");
         web.ignoring().antMatchers("/actuator/**");
+    }
+    
+    @Bean
+    public RestTemplate getRestTemplate() {
+    	return new RestTemplate();
     }
 }
