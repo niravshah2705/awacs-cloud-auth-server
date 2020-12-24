@@ -5,10 +5,6 @@ import java.util.concurrent.TimeUnit;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import io.grpc.health.v1.HealthGrpc;
-import io.grpc.health.v1.HealthGrpc.HealthBlockingStub;
-import io.grpc.inprocess.InProcessChannelBuilder;
-import io.grpc.inprocess.InProcessServerBuilder;
 import io.grpc.netty.shaded.io.grpc.netty.NettyServerBuilder;
 import net.devh.boot.grpc.server.security.authentication.BasicGrpcAuthenticationReader;
 import net.devh.boot.grpc.server.security.authentication.GrpcAuthenticationReader;
@@ -34,8 +30,10 @@ public class GrpcServerConfig {
 	        }
 	    };
 	}
-	@Bean
-	public HealthBlockingStub health() {
-		return HealthGrpc.newBlockingStub(InProcessChannelBuilder.forName(InProcessServerBuilder.generateName()).directExecutor().build());
-	}
+	
+//	@Bean
+//	public HealthBlockingStub health() {
+//		return HealthGrpc.newBlockingStub(InProcessChannelBuilder.forName(InProcessServerBuilder.generateName()).directExecutor().build());
+//	}
+	
 }
