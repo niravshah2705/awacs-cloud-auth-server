@@ -37,8 +37,7 @@ curl -kSs -X POST \
   -u "trinity:trinity" \
   -F grant_type=password \
   -F username=admin \
-  -F password=admin1234 \
-  -F client_id=trinity | json_pp
+  -F password=admin1234 | json_pp
 {
    "expires_in" : 10799,
    "scope" : "read write",
