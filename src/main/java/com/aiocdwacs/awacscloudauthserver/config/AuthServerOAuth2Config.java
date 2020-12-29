@@ -28,8 +28,8 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter {
 
 	@Autowired
-	@Qualifier("dataSource")
-	private DataSource dataSource;
+	@Qualifier("authDataSource")
+	private DataSource authDataSource;
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
@@ -60,7 +60,7 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
 
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		clients.jdbc(dataSource);
+		clients.jdbc(authDataSource);
 	}
 
 	@Override

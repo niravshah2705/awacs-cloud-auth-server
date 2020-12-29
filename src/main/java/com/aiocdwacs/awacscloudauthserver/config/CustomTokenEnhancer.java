@@ -25,7 +25,7 @@ public class CustomTokenEnhancer implements TokenEnhancer {
 				additionalInfo.put("phone", user.getMsisdn());
 				additionalInfo.put("profileLastUpdated", user.getUpdated());
 			}else {
-				additionalInfo.put("awacs", "awacs");
+				additionalInfo.put("sessionid", "awacs");
 			}
 		}finally {
 			((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInfo);

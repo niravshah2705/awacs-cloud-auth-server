@@ -89,6 +89,7 @@ create table awacs_user (
   user_name varchar(255) default null,
   password varchar(255) default null,
   aadhar varchar (255) default null,
+  confirmation_token varchar (255) default null,
   account_expired tinyint(1) default null,
   account_locked tinyint(1) default null,
   credentials_expired tinyint(1) default null,

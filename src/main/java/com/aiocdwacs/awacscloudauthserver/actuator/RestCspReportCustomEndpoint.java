@@ -2,6 +2,7 @@ package com.aiocdwacs.awacscloudauthserver.actuator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.endpoint.web.annotation.RestControllerEndpoint;
 import org.springframework.http.ResponseEntity;
 import org.springframework.retry.annotation.Backoff;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.aiocdwacs.awacscloudauthserver.service.EmailService;
 
 //https://csp.withgoogle.com/docs/index.html
 
@@ -29,6 +32,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RestControllerEndpoint(id="csp")
 public class RestCspReportCustomEndpoint {
 
+	@Autowired
+	EmailService emailService;
+	
 	Logger logger = LoggerFactory.getLogger(RestCspReportCustomEndpoint.class);
 	
 	@Retryable(maxAttempts=3, value=RuntimeException.class, backoff = @Backoff( delay = 300000, multiplier = 2) )

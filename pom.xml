@@ -98,6 +98,11 @@
 		</dependency>
 
 		<dependency>
+		    <groupId>com.microsoft.sqlserver</groupId>
+		    <artifactId>mssql-jdbc</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>com.aiocdawacs</groupId>
 			<artifactId>awacs-grpc-interface</artifactId>
 			<version>${awacs-commons-version}</version>
