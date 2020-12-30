@@ -95,7 +95,7 @@ public class RegisterController {
 	@RequestMapping(value="/confirm", method = RequestMethod.GET)
 	public ModelAndView showConfirmationPage(ModelAndView modelAndView, @RequestParam("token") String token) {
 
-		User user = userService.findByConfirmationToken(token);
+		User user = userService.findByEmail(token); //FIXME
 
 		if (user == null) { // No token found in DB
 			modelAndView.addObject("invalidToken", "Oops!  This is an invalid confirmation link.");
@@ -128,7 +128,7 @@ public class RegisterController {
 		}
 
 		// Find the user associated with the reset token
-		User user = userService.findByConfirmationToken((String)requestParams.get("token"));
+		User user = userService.findByEmail((String)requestParams.get("token")); //FIXME
 
 		// Set new password
 		user.setPassword(bCryptPasswordEncoder.encode((String)requestParams.get("password")));

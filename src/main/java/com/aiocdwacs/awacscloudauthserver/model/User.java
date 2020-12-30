@@ -29,88 +29,87 @@ public class User implements UserDetails, Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long Id;
-
-	private boolean ChangePasswordOnLogon;
-	private Long PictureId;
-	private Long WorkspaceId;
-	private Long UserSerial;
-	private Long AdhocSerial;
-	private String Username;
-	private String Password;
-	private String Role;
-	private String ResetKey;
-	private String Name;
-	private String Address1;
-	private String Address2;
-	private String Address3;
-	private Long CityId;
-	private Long StateId;
-	private String Country;
-	private String PhoneNo;
-	private String Mobile;
-	private String Email;
-	private String ContactPerson;
-	private boolean AwacsMTD;
-	private boolean IsLiveorderBlocked;
-	private boolean IsVerify;
-	private boolean IsAdmin;
-	private String IsAdminDelegate;
-	private String IsAdhoc;
-	private String DeviceId;
-	private String GCMRegisterKey;
-	private String Type;
-	private String LoginType;
-	private Long ProviderId;
-	private String ProviderType;
-	private String AwacsId;
-	private String PSPACode;
-	private String UniqueMobileCode;
-	private boolean IsSyncWithEdxhub;
-	private String ThirdPartySoftware;
-	private String ThirdPartyCode;
-	private LocalDateTime ThirdPartyLUM;
-	private LocalDateTime ThirdPartyLUT;
-	private boolean IsSyncWithThirdParty;
-	private String Dlic1;
-	private String Dlic2;
-	private String Dlic3;
-	private String Dlic4;
-	private String Dlic5;
-	private String Dlic6;
-	private String POBOTP;
-	private String GSTIN;
-	private String PAN;
-	private String XSource;
-	private String Pincode;
-	private String Remarks;
-	private String RegistrationId;
-	private String Source;
-	private String SourceType;
-	private String SignSource;
-	private String SignDetail;
-	private Long CreatedBy;
-	private LocalDateTime CreatedOn;
-	private Long ModifiedBy;
-	private LocalDateTime ModifiedOn;
-	private String Deleted;
-	private Long DeletedBy;
-	private LocalDateTime DeletedOn;
-	private boolean IsLicenseExpire;
-	private LocalDateTime LicenseExpireMailOn;
-	private boolean Sync;
-	private LocalDateTime LastActivity;
-	private Long OrderSeq;
-	private String AppVersion;
-	private String OSVersion;
-	private String Platform;
-	private String UserKind;
-	private String Bank;
-	private String IFSCCode;
-	private String CorpId;
-	private String UserId;
-	private String AccountNumber;
-	private String AppPackage;
+	private Long id;
+	private boolean changePasswordOnLogon;
+	private Long pictureId;
+	private Long workspaceId;
+	private Long userSerial;
+	private Long adhocSerial;
+	private String username;
+	private String password;
+	private String role;
+	private String resetKey;
+	private String name;
+	private String address1;
+	private String address2;
+	private String address3;
+	private Long cityId;
+	private Long stateId;
+	private String country;
+	private String phoneNo;
+	private String mobile;
+	private String email;
+	private String contactPerson;
+	private boolean awacsMTD;
+	private boolean isLiveorderBlocked;
+	private boolean isVerify;
+	private boolean isAdmin;
+	private String isAdminDelegate;
+	private String isAdhoc;
+	private String deviceId;
+	private String gCMRegisterKey;
+	private String type;
+	private String loginType;
+	private Long providerId;
+	private String providerType;
+	private String awacsId;
+	private String pSPACode;
+	private String uniqueMobileCode;
+	private boolean isSyncWithEdxhub;
+	private String thirdPartySoftware;
+	private String thirdPartyCode;
+	private LocalDateTime thirdPartyLUM;
+	private LocalDateTime thirdPartyLUT;
+	private boolean isSyncWithThirdParty;
+	private String dlic1;
+	private String dlic2;
+	private String dlic3;
+	private String dlic4;
+	private String dlic5;
+	private String dlic6;
+	private String pOBOTP;
+	private String gSTIN;
+	private String pAN;
+	private String xSource;
+	private String pincode;
+	private String remarks;
+	private String registrationId;
+	private String source;
+	private String sourceType;
+	private String signSource;
+	private String signDetail;
+	private Long createdBy;
+	private LocalDateTime createdOn;
+	private Long modifiedBy;
+	private LocalDateTime modifiedOn;
+	private String deleted;
+	private Long deletedBy;
+	private LocalDateTime deletedOn;
+	private boolean isLicenseExpire;
+	private LocalDateTime licenseExpireMailOn;
+	private boolean sync;
+	private LocalDateTime lastActivity;
+	private Long orderSeq;
+	private String appVersion;
+	private String oSVersion;
+	private String platform;
+	private String userKind;
+	private String bank;
+	private String iFSCCode;
+	private String corpId;
+	private String userId;
+	private String accountNumber;
+	private String appPackage;
 	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "users_authorities", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "Id"), inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
@@ -121,814 +120,815 @@ public class User implements UserDetails, Serializable {
 	public User() {
 		super();
 	}
-	
+
 	public Long getId() {
-		return Id;
+		return id;
 	}
 
 	public void setId(Long id) {
-		Id = id;
+		this.id = id;
 	}
 
 
 	public boolean isChangePasswordOnLogon() {
-		return ChangePasswordOnLogon;
+		return changePasswordOnLogon;
 	}
 
 
 	public void setChangePasswordOnLogon(boolean changePasswordOnLogon) {
-		ChangePasswordOnLogon = changePasswordOnLogon;
+		this.changePasswordOnLogon = changePasswordOnLogon;
 	}
 
 
 	public Long getPictureId() {
-		return PictureId;
+		return pictureId;
 	}
 
 
 	public void setPictureId(Long pictureId) {
-		PictureId = pictureId;
+		this.pictureId = pictureId;
 	}
 
 
 	public Long getWorkspaceId() {
-		return WorkspaceId;
+		return workspaceId;
 	}
 
 
 	public void setWorkspaceId(Long workspaceId) {
-		WorkspaceId = workspaceId;
+		this.workspaceId = workspaceId;
 	}
 
 
 	public Long getUserSerial() {
-		return UserSerial;
+		return userSerial;
 	}
 
 
 	public void setUserSerial(Long userSerial) {
-		UserSerial = userSerial;
+		this.userSerial = userSerial;
 	}
 
 
 	public Long getAdhocSerial() {
-		return AdhocSerial;
+		return adhocSerial;
 	}
 
 
 	public void setAdhocSerial(Long adhocSerial) {
-		AdhocSerial = adhocSerial;
+		this.adhocSerial = adhocSerial;
 	}
 
 
 	public String getUsername() {
-		return Username;
+		return username;
 	}
 
 
 	public void setUsername(String username) {
-		Username = username;
+		this.username = username;
 	}
 
 
 	public String getPassword() {
-		return Password;
+		return password;
 	}
 
 
 	public void setPassword(String password) {
-		Password = password;
+		this.password = password;
 	}
 
 
 	public String getRole() {
-		return Role;
+		return role;
 	}
 
 
 	public void setRole(String role) {
-		Role = role;
+		this.role = role;
 	}
 
 
 	public String getResetKey() {
-		return ResetKey;
+		return resetKey;
 	}
 
 
 	public void setResetKey(String resetKey) {
-		ResetKey = resetKey;
+		this.resetKey = resetKey;
 	}
 
 
 	public String getName() {
-		return Name;
+		return name;
 	}
 
 
 	public void setName(String name) {
-		Name = name;
+		this.name = name;
 	}
 
 
 	public String getAddress1() {
-		return Address1;
+		return address1;
 	}
 
 
 	public void setAddress1(String address1) {
-		Address1 = address1;
+		this.address1 = address1;
 	}
 
 
 	public String getAddress2() {
-		return Address2;
+		return address2;
 	}
 
 
 	public void setAddress2(String address2) {
-		Address2 = address2;
+		this.address2 = address2;
 	}
 
 
 	public String getAddress3() {
-		return Address3;
+		return address3;
 	}
 
 
 	public void setAddress3(String address3) {
-		Address3 = address3;
+		this.address3 = address3;
 	}
 
 
 	public Long getCityId() {
-		return CityId;
+		return cityId;
 	}
 
 
 	public void setCityId(Long cityId) {
-		CityId = cityId;
+		this.cityId = cityId;
 	}
 
 
 	public Long getStateId() {
-		return StateId;
+		return stateId;
 	}
 
 
 	public void setStateId(Long stateId) {
-		StateId = stateId;
+		this.stateId = stateId;
 	}
 
 
 	public String getCountry() {
-		return Country;
+		return country;
 	}
 
 
 	public void setCountry(String country) {
-		Country = country;
+		this.country = country;
 	}
 
 
 	public String getPhoneNo() {
-		return PhoneNo;
+		return phoneNo;
 	}
 
 
 	public void setPhoneNo(String phoneNo) {
-		PhoneNo = phoneNo;
+		this.phoneNo = phoneNo;
 	}
 
 
 	public String getMobile() {
-		return Mobile;
+		return mobile;
 	}
 
 
 	public void setMobile(String mobile) {
-		Mobile = mobile;
+		this.mobile = mobile;
 	}
 
 
 	public String getEmail() {
-		return Email;
+		return email;
 	}
 
 
 	public void setEmail(String email) {
-		Email = email;
+		this.email = email;
 	}
 
 
 	public String getContactPerson() {
-		return ContactPerson;
+		return contactPerson;
 	}
 
 
 	public void setContactPerson(String contactPerson) {
-		ContactPerson = contactPerson;
+		this.contactPerson = contactPerson;
 	}
 
 
 	public boolean isAwacsMTD() {
-		return AwacsMTD;
+		return awacsMTD;
 	}
 
 
 	public void setAwacsMTD(boolean awacsMTD) {
-		AwacsMTD = awacsMTD;
+		this.awacsMTD = awacsMTD;
 	}
 
 
-	public boolean isIsLiveorderBlocked() {
-		return IsLiveorderBlocked;
+	public boolean isLiveorderBlocked() {
+		return isLiveorderBlocked;
 	}
 
 
-	public void setIsLiveorderBlocked(boolean isLiveorderBlocked) {
-		IsLiveorderBlocked = isLiveorderBlocked;
+	public void setLiveorderBlocked(boolean isLiveorderBlocked) {
+		this.isLiveorderBlocked = isLiveorderBlocked;
 	}
 
 
-	public boolean isIsVerify() {
-		return IsVerify;
+	public boolean isVerify() {
+		return isVerify;
 	}
 
 
-	public void setIsVerify(boolean isVerify) {
-		IsVerify = isVerify;
+	public void setVerify(boolean isVerify) {
+		this.isVerify = isVerify;
 	}
 
 
-	public boolean isIsAdmin() {
-		return IsAdmin;
+	public boolean isAdmin() {
+		return isAdmin;
 	}
 
 
-	public void setIsAdmin(boolean isAdmin) {
-		IsAdmin = isAdmin;
+	public void setAdmin(boolean isAdmin) {
+		this.isAdmin = isAdmin;
 	}
 
 
 	public String getIsAdminDelegate() {
-		return IsAdminDelegate;
+		return isAdminDelegate;
 	}
 
 
 	public void setIsAdminDelegate(String isAdminDelegate) {
-		IsAdminDelegate = isAdminDelegate;
+		this.isAdminDelegate = isAdminDelegate;
 	}
 
 
 	public String getIsAdhoc() {
-		return IsAdhoc;
+		return isAdhoc;
 	}
 
 
 	public void setIsAdhoc(String isAdhoc) {
-		IsAdhoc = isAdhoc;
+		this.isAdhoc = isAdhoc;
 	}
 
 
 	public String getDeviceId() {
-		return DeviceId;
+		return deviceId;
 	}
 
 
 	public void setDeviceId(String deviceId) {
-		DeviceId = deviceId;
+		this.deviceId = deviceId;
 	}
 
 
-	public String getGCMRegisterKey() {
-		return GCMRegisterKey;
+	public String getgCMRegisterKey() {
+		return gCMRegisterKey;
 	}
 
 
-	public void setGCMRegisterKey(String gCMRegisterKey) {
-		GCMRegisterKey = gCMRegisterKey;
+	public void setgCMRegisterKey(String gCMRegisterKey) {
+		this.gCMRegisterKey = gCMRegisterKey;
 	}
 
 
 	public String getType() {
-		return Type;
+		return type;
 	}
 
 
 	public void setType(String type) {
-		Type = type;
+		this.type = type;
 	}
 
 
 	public String getLoginType() {
-		return LoginType;
+		return loginType;
 	}
 
 
 	public void setLoginType(String loginType) {
-		LoginType = loginType;
+		this.loginType = loginType;
 	}
 
 
 	public Long getProviderId() {
-		return ProviderId;
+		return providerId;
 	}
 
 
 	public void setProviderId(Long providerId) {
-		ProviderId = providerId;
+		this.providerId = providerId;
 	}
 
 
 	public String getProviderType() {
-		return ProviderType;
+		return providerType;
 	}
 
 
 	public void setProviderType(String providerType) {
-		ProviderType = providerType;
+		this.providerType = providerType;
 	}
 
 
 	public String getAwacsId() {
-		return AwacsId;
+		return awacsId;
 	}
 
 
 	public void setAwacsId(String awacsId) {
-		AwacsId = awacsId;
+		this.awacsId = awacsId;
 	}
 
 
-	public String getPSPACode() {
-		return PSPACode;
+	public String getpSPACode() {
+		return pSPACode;
 	}
 
 
-	public void setPSPACode(String pSPACode) {
-		PSPACode = pSPACode;
+	public void setpSPACode(String pSPACode) {
+		this.pSPACode = pSPACode;
 	}
 
 
 	public String getUniqueMobileCode() {
-		return UniqueMobileCode;
+		return uniqueMobileCode;
 	}
 
 
 	public void setUniqueMobileCode(String uniqueMobileCode) {
-		UniqueMobileCode = uniqueMobileCode;
+		this.uniqueMobileCode = uniqueMobileCode;
 	}
 
 
-	public boolean isIsSyncWithEdxhub() {
-		return IsSyncWithEdxhub;
+	public boolean isSyncWithEdxhub() {
+		return isSyncWithEdxhub;
 	}
 
 
-	public void setIsSyncWithEdxhub(boolean isSyncWithEdxhub) {
-		IsSyncWithEdxhub = isSyncWithEdxhub;
+	public void setSyncWithEdxhub(boolean isSyncWithEdxhub) {
+		this.isSyncWithEdxhub = isSyncWithEdxhub;
 	}
 
 
 	public String getThirdPartySoftware() {
-		return ThirdPartySoftware;
+		return thirdPartySoftware;
 	}
 
 
 	public void setThirdPartySoftware(String thirdPartySoftware) {
-		ThirdPartySoftware = thirdPartySoftware;
+		this.thirdPartySoftware = thirdPartySoftware;
 	}
 
 
 	public String getThirdPartyCode() {
-		return ThirdPartyCode;
+		return thirdPartyCode;
 	}
 
 
 	public void setThirdPartyCode(String thirdPartyCode) {
-		ThirdPartyCode = thirdPartyCode;
+		this.thirdPartyCode = thirdPartyCode;
 	}
 
 
 	public LocalDateTime getThirdPartyLUM() {
-		return ThirdPartyLUM;
+		return thirdPartyLUM;
 	}
 
 
 	public void setThirdPartyLUM(LocalDateTime thirdPartyLUM) {
-		ThirdPartyLUM = thirdPartyLUM;
+		this.thirdPartyLUM = thirdPartyLUM;
 	}
 
 
 	public LocalDateTime getThirdPartyLUT() {
-		return ThirdPartyLUT;
+		return thirdPartyLUT;
 	}
 
 
 	public void setThirdPartyLUT(LocalDateTime thirdPartyLUT) {
-		ThirdPartyLUT = thirdPartyLUT;
+		this.thirdPartyLUT = thirdPartyLUT;
 	}
 
 
-	public boolean isIsSyncWithThirdParty() {
-		return IsSyncWithThirdParty;
+	public boolean isSyncWithThirdParty() {
+		return isSyncWithThirdParty;
 	}
 
 
-	public void setIsSyncWithThirdParty(boolean isSyncWithThirdParty) {
-		IsSyncWithThirdParty = isSyncWithThirdParty;
+	public void setSyncWithThirdParty(boolean isSyncWithThirdParty) {
+		this.isSyncWithThirdParty = isSyncWithThirdParty;
 	}
 
 
 	public String getDlic1() {
-		return Dlic1;
+		return dlic1;
 	}
 
 
 	public void setDlic1(String dlic1) {
-		Dlic1 = dlic1;
+		this.dlic1 = dlic1;
 	}
 
 
 	public String getDlic2() {
-		return Dlic2;
+		return dlic2;
 	}
 
 
 	public void setDlic2(String dlic2) {
-		Dlic2 = dlic2;
+		this.dlic2 = dlic2;
 	}
 
 
 	public String getDlic3() {
-		return Dlic3;
+		return dlic3;
 	}
 
 
 	public void setDlic3(String dlic3) {
-		Dlic3 = dlic3;
+		this.dlic3 = dlic3;
 	}
 
 
 	public String getDlic4() {
-		return Dlic4;
+		return dlic4;
 	}
 
 
 	public void setDlic4(String dlic4) {
-		Dlic4 = dlic4;
+		this.dlic4 = dlic4;
 	}
 
 
 	public String getDlic5() {
-		return Dlic5;
+		return dlic5;
 	}
 
 
 	public void setDlic5(String dlic5) {
-		Dlic5 = dlic5;
+		this.dlic5 = dlic5;
 	}
 
 
 	public String getDlic6() {
-		return Dlic6;
+		return dlic6;
 	}
 
 
 	public void setDlic6(String dlic6) {
-		Dlic6 = dlic6;
+		this.dlic6 = dlic6;
 	}
 
 
-	public String getPOBOTP() {
-		return POBOTP;
+	public String getpOBOTP() {
+		return pOBOTP;
 	}
 
 
-	public void setPOBOTP(String pOBOTP) {
-		POBOTP = pOBOTP;
+	public void setpOBOTP(String pOBOTP) {
+		this.pOBOTP = pOBOTP;
 	}
 
 
-	public String getGSTIN() {
-		return GSTIN;
+	public String getgSTIN() {
+		return gSTIN;
 	}
 
 
-	public void setGSTIN(String gSTIN) {
-		GSTIN = gSTIN;
+	public void setgSTIN(String gSTIN) {
+		this.gSTIN = gSTIN;
 	}
 
 
-	public String getPAN() {
-		return PAN;
+	public String getpAN() {
+		return pAN;
 	}
 
 
-	public void setPAN(String pAN) {
-		PAN = pAN;
+	public void setpAN(String pAN) {
+		this.pAN = pAN;
 	}
 
 
-	public String getXSource() {
-		return XSource;
+	public String getxSource() {
+		return xSource;
 	}
 
 
-	public void setXSource(String xSource) {
-		XSource = xSource;
+	public void setxSource(String xSource) {
+		this.xSource = xSource;
 	}
 
 
 	public String getPincode() {
-		return Pincode;
+		return pincode;
 	}
 
 
 	public void setPincode(String pincode) {
-		Pincode = pincode;
+		this.pincode = pincode;
 	}
 
 
 	public String getRemarks() {
-		return Remarks;
+		return remarks;
 	}
 
 
 	public void setRemarks(String remarks) {
-		Remarks = remarks;
+		this.remarks = remarks;
 	}
 
 
 	public String getRegistrationId() {
-		return RegistrationId;
+		return registrationId;
 	}
 
 
 	public void setRegistrationId(String registrationId) {
-		RegistrationId = registrationId;
+		this.registrationId = registrationId;
 	}
 
 
 	public String getSource() {
-		return Source;
+		return source;
 	}
 
 
 	public void setSource(String source) {
-		Source = source;
+		this.source = source;
 	}
 
 
 	public String getSourceType() {
-		return SourceType;
+		return sourceType;
 	}
 
 
 	public void setSourceType(String sourceType) {
-		SourceType = sourceType;
+		this.sourceType = sourceType;
 	}
 
 
 	public String getSignSource() {
-		return SignSource;
+		return signSource;
 	}
 
 
 	public void setSignSource(String signSource) {
-		SignSource = signSource;
+		this.signSource = signSource;
 	}
 
 
 	public String getSignDetail() {
-		return SignDetail;
+		return signDetail;
 	}
 
 
 	public void setSignDetail(String signDetail) {
-		SignDetail = signDetail;
+		this.signDetail = signDetail;
 	}
 
 
 	public Long getCreatedBy() {
-		return CreatedBy;
+		return createdBy;
 	}
 
 
 	public void setCreatedBy(Long createdBy) {
-		CreatedBy = createdBy;
+		this.createdBy = createdBy;
 	}
 
 
 	public LocalDateTime getCreatedOn() {
-		return CreatedOn;
+		return createdOn;
 	}
 
 
 	public void setCreatedOn(LocalDateTime createdOn) {
-		CreatedOn = createdOn;
+		this.createdOn = createdOn;
 	}
 
 
 	public Long getModifiedBy() {
-		return ModifiedBy;
+		return modifiedBy;
 	}
 
 
 	public void setModifiedBy(Long modifiedBy) {
-		ModifiedBy = modifiedBy;
+		this.modifiedBy = modifiedBy;
 	}
 
 
 	public LocalDateTime getModifiedOn() {
-		return ModifiedOn;
+		return modifiedOn;
 	}
 
 
 	public void setModifiedOn(LocalDateTime modifiedOn) {
-		ModifiedOn = modifiedOn;
+		this.modifiedOn = modifiedOn;
 	}
 
 
 	public String getDeleted() {
-		return Deleted;
+		return deleted;
 	}
 
 
 	public void setDeleted(String deleted) {
-		Deleted = deleted;
+		this.deleted = deleted;
 	}
 
 
 	public Long getDeletedBy() {
-		return DeletedBy;
+		return deletedBy;
 	}
 
 
 	public void setDeletedBy(Long deletedBy) {
-		DeletedBy = deletedBy;
+		this.deletedBy = deletedBy;
 	}
 
 
 	public LocalDateTime getDeletedOn() {
-		return DeletedOn;
+		return deletedOn;
 	}
 
 
 	public void setDeletedOn(LocalDateTime deletedOn) {
-		DeletedOn = deletedOn;
+		this.deletedOn = deletedOn;
 	}
 
 
-	public boolean isIsLicenseExpire() {
-		return IsLicenseExpire;
+	public boolean isLicenseExpire() {
+		return isLicenseExpire;
 	}
 
 
-	public void setIsLicenseExpire(boolean isLicenseExpire) {
-		IsLicenseExpire = isLicenseExpire;
+	public void setLicenseExpire(boolean isLicenseExpire) {
+		this.isLicenseExpire = isLicenseExpire;
 	}
 
 
 	public LocalDateTime getLicenseExpireMailOn() {
-		return LicenseExpireMailOn;
+		return licenseExpireMailOn;
 	}
 
 
 	public void setLicenseExpireMailOn(LocalDateTime licenseExpireMailOn) {
-		LicenseExpireMailOn = licenseExpireMailOn;
+		this.licenseExpireMailOn = licenseExpireMailOn;
 	}
 
 
 	public boolean isSync() {
-		return Sync;
+		return sync;
 	}
 
 
 	public void setSync(boolean sync) {
-		Sync = sync;
+		this.sync = sync;
 	}
 
 
 	public LocalDateTime getLastActivity() {
-		return LastActivity;
+		return lastActivity;
 	}
 
 
 	public void setLastActivity(LocalDateTime lastActivity) {
-		LastActivity = lastActivity;
+		this.lastActivity = lastActivity;
 	}
 
 
 	public Long getOrderSeq() {
-		return OrderSeq;
+		return orderSeq;
 	}
 
 
 	public void setOrderSeq(Long orderSeq) {
-		OrderSeq = orderSeq;
+		this.orderSeq = orderSeq;
 	}
 
 
 	public String getAppVersion() {
-		return AppVersion;
+		return appVersion;
 	}
 
 
 	public void setAppVersion(String appVersion) {
-		AppVersion = appVersion;
+		this.appVersion = appVersion;
 	}
 
 
-	public String getOSVersion() {
-		return OSVersion;
+	public String getoSVersion() {
+		return oSVersion;
 	}
 
 
-	public void setOSVersion(String oSVersion) {
-		OSVersion = oSVersion;
+	public void setoSVersion(String oSVersion) {
+		this.oSVersion = oSVersion;
 	}
 
 
 	public String getPlatform() {
-		return Platform;
+		return platform;
 	}
 
 
 	public void setPlatform(String platform) {
-		Platform = platform;
+		this.platform = platform;
 	}
 
 
 	public String getUserKind() {
-		return UserKind;
+		return userKind;
 	}
 
 
 	public void setUserKind(String userKind) {
-		UserKind = userKind;
+		this.userKind = userKind;
 	}
 
 
 	public String getBank() {
-		return Bank;
+		return bank;
 	}
 
 
 	public void setBank(String bank) {
-		Bank = bank;
+		this.bank = bank;
 	}
 
 
-	public String getIFSCCode() {
-		return IFSCCode;
+	public String getiFSCCode() {
+		return iFSCCode;
 	}
 
 
-	public void setIFSCCode(String iFSCCode) {
-		IFSCCode = iFSCCode;
+	public void setiFSCCode(String iFSCCode) {
+		this.iFSCCode = iFSCCode;
 	}
 
 
 	public String getCorpId() {
-		return CorpId;
+		return corpId;
 	}
 
 
 	public void setCorpId(String corpId) {
-		CorpId = corpId;
+		this.corpId = corpId;
 	}
 
 
 	public String getUserId() {
-		return UserId;
+		return userId;
 	}
 
 
 	public void setUserId(String userId) {
-		UserId = userId;
+		this.userId = userId;
 	}
 
 
 	public String getAccountNumber() {
-		return AccountNumber;
+		return accountNumber;
 	}
 
 
 	public void setAccountNumber(String accountNumber) {
-		AccountNumber = accountNumber;
+		this.accountNumber = accountNumber;
 	}
 
 
 	public String getAppPackage() {
-		return AppPackage;
+		return appPackage;
 	}
 
 
 	public void setAppPackage(String appPackage) {
-		AppPackage = appPackage;
+		this.appPackage = appPackage;
 	}
+
 
 	public Collection<Authority> getAuthorities() {
 		return authorities;
@@ -938,6 +938,7 @@ public class User implements UserDetails, Serializable {
 	public void setAuthorities(Collection<Authority> authorities) {
 		this.authorities = authorities;
 	}
+
 
 	@Override
 	public String toString() {

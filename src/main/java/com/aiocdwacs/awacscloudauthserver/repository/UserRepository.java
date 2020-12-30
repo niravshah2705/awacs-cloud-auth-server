@@ -1,6 +1,7 @@
 package com.aiocdwacs.awacscloudauthserver.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
@@ -16,6 +17,6 @@ public interface UserRepository extends PagingAndSortingRepository<User,Long> {
 	
 	User findByEmail(String email);
 	
-	User findByConfirmationToken(String confirmationToken);
-
+	List<User> findByAccountNumber(String accountNumber);
+	
 }
