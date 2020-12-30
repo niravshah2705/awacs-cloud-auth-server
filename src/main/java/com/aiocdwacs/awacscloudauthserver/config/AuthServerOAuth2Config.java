@@ -46,6 +46,7 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
 	@Bean
 	public TokenStore tokenStore() {
 		return new JwtTokenStore(jwtAccessTokenConverter);
+		//return new JdbcTokenStore(dataSource);
 	}
 
 	@Bean
