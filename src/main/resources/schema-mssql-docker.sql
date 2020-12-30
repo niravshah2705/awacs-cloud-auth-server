@@ -1,7 +1,7 @@
 
 CREATE TABLE [dbo].[Users](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[ChangePasswordOnLogon] [bit] NULL,
+	[ChangePasswordOnLogon] [bit] default 0,
 	[PictureId] [bigint] NULL,
 	[WorkspaceId] [bigint] NULL,
 	[UserSerial] [bigint] NULL,
@@ -21,12 +21,12 @@ CREATE TABLE [dbo].[Users](
 	[Mobile] [nvarchar](15) NULL,
 	[Email] [nvarchar](60) NULL,
 	[ContactPerson] [nvarchar](30) NULL,
-	[AwacsMTD] [bit] NULL,
-	[IsLiveorderBlocked] [bit] NULL,
-	[IsVerify] [bit] NULL,
-	[IsAdmin] [bit] NULL,
-	[IsAdminDelegate] [bit] NULL,
-	[IsAdhoc] [bit] NULL,
+	[AwacsMTD] [bit] default 1,
+	[IsLiveorderBlocked] [bit] default 0,
+	[IsVerify] [bit] default 1,
+	[IsAdmin] [bit] default 1,
+	[IsAdminDelegate] [bit] default 1,
+	[IsAdhoc] [bit] default 1,
 	[DeviceId] [nvarchar](50) NULL,
 	[GCMRegisterKey] [nvarchar](max) NULL,
 	[Type] [nvarchar](50) NULL,
@@ -36,12 +36,12 @@ CREATE TABLE [dbo].[Users](
 	[AwacsId] [nvarchar](10) NULL,
 	[PSPACode] [nvarchar](61) NULL,
 	[UniqueMobileCode] [nvarchar](11) NULL,
-	[IsSyncWithEdxhub] [bit] NULL,
+	[IsSyncWithEdxhub] [bit] default 1,
 	[ThirdPartySoftware] [nvarchar](20) NULL,
 	[ThirdPartyCode] [nvarchar](61) NULL,
 	[ThirdPartyLUM] [datetime] NULL,
 	[ThirdPartyLUT] [datetime] NULL,
-	[IsSyncWithThirdParty] [bit] NULL,
+	[IsSyncWithThirdParty] [bit] default 1,
 	[Dlic1] [nvarchar](100) NULL,
 	[Dlic2] [nvarchar](100) NULL,
 	[Dlic3] [nvarchar](20) NULL,
@@ -63,12 +63,12 @@ CREATE TABLE [dbo].[Users](
 	[CreatedOn] [datetime] NULL,
 	[ModifiedBy] [bigint] NULL,
 	[ModifiedOn] [datetime] NULL,
-	[Deleted] [bit] NULL,
+	[Deleted] [bit] default 1,
 	[DeletedBy] [bigint] NULL,
 	[DeletedOn] [datetime] NULL,
-	[IsLicenseExpire] [bit] NULL,
+	[IsLicenseExpire] [bit] default 1,
 	[LicenseExpireMailOn] [datetime] NULL,
-	[Sync] [bit] NULL,
+	[Sync] [bit] default 1,
 	[LastActivity] [datetime] NULL,
 	[OrderSeq] [bigint] NULL,
 	[AppVersion] [nvarchar](25) NULL,
@@ -83,3 +83,11 @@ CREATE TABLE [dbo].[Users](
 	[AppPackage] [nvarchar](max) NULL
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
+
+SET IDENTITY_INSERT dbo.Users ON
+
+INSERT INTO [dbo].[Users]([Id] ,[Username],	[Password], [Role], [Name],[Address1],[Address2],[Address3],[AwacsMTD]) VALUES ('1','admin','$2a$08$qvrzQZ7jJ7oy2p/msL4M0.l83Cd0jNsX6AJUitbgRXGzge4j035ha','Customer','Girish Mahajan', '501 Nakshtra Galaxy', 'CHSL Majiwada', 'Maharashtra', 1);
+
+INSERT INTO [dbo].[Users]([Id] ,[Username],	[Password], [Role], [Name],[Address1],[Address2],[Address3],[AwacsMTD]) VALUES ('2','wakandagrpc','$2y$08$byB9gh2IvpDLA9p7URsp5OgY0ydCwmKxArUL5Jf4tJShBJW1ZlCI.','Implicit','Grpc Internal User', 'Nobody', 'Nowhere', 'Maharashtra', 1);
+
+SET IDENTITY_INSERT dbo.Users OFF
