@@ -61,7 +61,7 @@ public class CloudGrpcCheckTokenServiceImpl extends GrpcAwacsTokenServiceImplBas
 
 		// DefaultOAuth2AccessToken result = new DefaultOAuth2AccessToken(token);
 
-		Long millis = LocalDateTime.now().plusHours(3).toInstant(ZoneOffset.UTC).toEpochMilli(); // there is an issue
+		Long millis = LocalDateTime.now().plusHours(Integer.parseInt(System.getProperty("default.token.expiry.in-hours", "24"))).toInstant(ZoneOffset.UTC).toEpochMilli(); // there is an issue
 		// with response
 		// timestamp
 		Timestamp exp = Timestamp.newBuilder().setSeconds(millis / 1000).setNanos((int) ((millis % 1000) * 1000000))
