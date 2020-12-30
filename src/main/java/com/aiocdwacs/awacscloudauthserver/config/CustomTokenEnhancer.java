@@ -22,8 +22,8 @@ public class CustomTokenEnhancer implements TokenEnhancer {
 				User user = (User)authentication.getPrincipal();
 				additionalInfo.put("id", user.getId());
 				additionalInfo.put("email", user.getEmail());
-				additionalInfo.put("phone", user.getMsisdn());
-				additionalInfo.put("profileLastUpdated", user.getUpdated());
+				additionalInfo.put("phone", user.getPhoneNo());
+				additionalInfo.put("profileLastUpdated", user.getModifiedOn());
 			}else {
 				additionalInfo.put("sessionid", "awacs");
 			}

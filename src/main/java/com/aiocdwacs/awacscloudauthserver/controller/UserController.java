@@ -63,10 +63,10 @@ class UserController {
 
 	@Autowired
 	OtpService otpService;
-	
+
 	@Autowired
 	EmailService emailService;
-	
+
 	UserController(UserRepository repository, PasswordEncoder passwordEncoder, TokenStore tokenStore) {
 		this.repository = repository;
 		this.passwordEncoder = passwordEncoder;
@@ -127,21 +127,21 @@ class UserController {
 					throw new InvalidEmailFormatException("Invalid email: "+res.getEmail());
 				}
 			}
-			if(Objects.nonNull(res.getMsisdn())) {
-				if(Pattern.matches(PHONE_PATTERN, res.getMsisdn())) {
-					userToSave.setMsisdn(res.getMsisdn());
+			if(Objects.nonNull(res.getPhoneNo())) {
+				if(Pattern.matches(PHONE_PATTERN, res.getPhoneNo())) {
+					userToSave.setPhoneNo(res.getPhoneNo());
 				}else {
-					throw new InvalidPhoneFormatException("Invalid phone: "+res.getMsisdn());
+					throw new InvalidPhoneFormatException("Invalid phone: "+res.getPhoneNo());
 				}
 			}
 
-			if(Objects.nonNull(res.getAadhar())) {
-				if(Pattern.matches(AADHAR_PATTERN, res.getAadhar())) {
-					userToSave.setAadhar(res.getAadhar());
-				}else {
-					throw new InvalidPhoneFormatException("Invalid aadhar: "+res.getAadhar());
-				}
-			}
+			//			if(Objects.nonNull(res.getAadhar())) {
+			//				if(Pattern.matches(AADHAR_PATTERN, res.getAadhar())) {
+			//					userToSave.setAadhar(res.getAadhar());
+			//				}else {
+			//					throw new InvalidPhoneFormatException("Invalid aadhar: "+res.getAadhar());
+			//				}
+			//			}
 
 			if(Objects.nonNull(res.getPassword())) {
 				userToSave.setPassword(passwordEncoder.encode(res.getPassword()));
@@ -161,7 +161,7 @@ class UserController {
 			//				| explicit_defaults_for_timestamp | ON    |
 			//				+---------------------------------+-------+
 			//
-			userToSave.setUpdated(LocalDateTime.now());	
+			userToSave.setModifiedOn(LocalDateTime.now());	
 			repository.save(userToSave);
 			return ResponseEntity.ok("success");
 		}
@@ -170,8 +170,8 @@ class UserController {
 
 	@PostMapping("/SignUp")
 	@ResponseBody ResponseEntity<User> create(@RequestBody User res, HttpServletRequest request) {
-		res.setCreated(LocalDateTime.now());		//known issue
-		res.setUpdated(res.getCreated());
+		res.setCreatedOn(LocalDateTime.now());		//known issue
+		res.setModifiedOn(res.getCreatedOn());
 		res.setPassword(passwordEncoder.encode(res.getPassword()));
 		User u = repository.save(res);
 		revoke(request);
@@ -233,14 +233,14 @@ class UserController {
 			throw new UserPrincipalNotFoundException("userName="+userName);
 		}
 	}
-	
-	
+
+
 	@PostMapping("SendOTP")
 	@PreAuthorize("hasAuthority('USER')")
 	public void sendOneTimePassword(@RequestParam String userName) throws UserPrincipalNotFoundException, ChangePasswordException {
 		User user = repository.findByUsername(userName);
 		if(user!=null) {
-			otpService.sendOneTimePassword(user.getMsisdn(), user.getEmail());
+			otpService.sendOneTimePassword(user.getPhoneNo(), user.getEmail());
 			//emailService.sendEmail();
 		}else {
 			throw new UserPrincipalNotFoundException("userName="+userName);
@@ -248,20 +248,20 @@ class UserController {
 	}
 
 
-	@PutMapping("/{id}/aiocd/change/uidai-aadhar")
-	@PreAuthorize("hasAuthority('SYSTEM')")
-	void changeAadhar(@PathVariable Long id, @RequestParam String newAadhar) throws UserPrincipalNotFoundException, AadharNotFoundException {
-		User user = repository.findById(id).orElseThrow(() -> new UserPrincipalNotFoundException("id="+id));
-
-		if(Objects.nonNull(newAadhar)) {
-			if(Pattern.matches(AADHAR_PATTERN, newAadhar)) {
-				user.setAadhar(newAadhar);
-				repository.save(user);
-			}else {
-				throw new AadharNotFoundException("old password doesn't match");
-			}
-		}
-	}
+	//	@PutMapping("/{id}/aiocd/change/uidai-aadhar")
+	//	@PreAuthorize("hasAuthority('SYSTEM')")
+	//	void changeAadhar(@PathVariable Long id, @RequestParam String newAadhar) throws UserPrincipalNotFoundException, AadharNotFoundException {
+	//		User user = repository.findById(id).orElseThrow(() -> new UserPrincipalNotFoundException("id="+id));
+	//
+	//		if(Objects.nonNull(newAadhar)) {
+	//			if(Pattern.matches(AADHAR_PATTERN, newAadhar)) {
+	//				user.setAadhar(newAadhar);
+	//				repository.save(user);
+	//			}else {
+	//				throw new AadharNotFoundException("old password doesn't match");
+	//			}
+	//		}
+	//	}
 
 
 	@ExceptionHandler(InvalidPhoneFormatException.class)

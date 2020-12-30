@@ -2,7 +2,6 @@ package com.aiocdwacs.awacscloudauthserver.controller;
 
 
 import java.util.Map;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.aiocdwacs.awacscloudauthserver.LoginType;
 import com.aiocdwacs.awacscloudauthserver.model.User;
 import com.aiocdwacs.awacscloudauthserver.service.EmailService;
 import com.aiocdwacs.awacscloudauthserver.service.UserService;
@@ -66,10 +66,10 @@ public class RegisterController {
 		} else { // new user so we create user and send confirmation e-mail
 
 			// Disable user until they click on confirmation link in email
-			user.setEnabled(false);
+			user.setLoginType(LoginType.INACTIVE.name());
 
 			// Generate random 36-character string token for confirmation link
-			user.setConfirmationToken(UUID.randomUUID().toString());
+			//user.setConfirmationToken(UUID.randomUUID().toString());
 
 			userService.saveUser(user);
 
@@ -79,7 +79,7 @@ public class RegisterController {
 			registrationEmail.setTo(user.getEmail());
 			registrationEmail.setSubject("Registration Confirmation");
 			registrationEmail.setText("To confirm your e-mail address, please click the link below:\n"
-					+ appUrl + "/confirm?token=" + user.getConfirmationToken());
+					+ appUrl + "/confirm?token=" + user.getSignDetail());
 			registrationEmail.setFrom("noreply@aiocdawacs.com");
 
 			emailService.sendEmail(registrationEmail);
@@ -100,7 +100,7 @@ public class RegisterController {
 		if (user == null) { // No token found in DB
 			modelAndView.addObject("invalidToken", "Oops!  This is an invalid confirmation link.");
 		} else { // Token found
-			modelAndView.addObject("confirmationToken", user.getConfirmationToken());
+			modelAndView.addObject("confirmationToken", user.getSignDetail());
 		}
 
 		modelAndView.setViewName("confirm");
@@ -134,7 +134,7 @@ public class RegisterController {
 		user.setPassword(bCryptPasswordEncoder.encode((String)requestParams.get("password")));
 
 		// Set user to enabled
-		user.setEnabled(true);
+		user.setLoginType(LoginType.ACTIVE.name());
 
 		// Save user
 		userService.saveUser(user);
