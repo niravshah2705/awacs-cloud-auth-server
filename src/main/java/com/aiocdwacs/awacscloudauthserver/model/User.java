@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class User implements UserDetails, Serializable {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private boolean changePasswordOnLogon;
 	private Long pictureId;
