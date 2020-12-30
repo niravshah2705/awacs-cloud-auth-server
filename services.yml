@@ -1,8 +1,25 @@
 version: '3.3'
 
 services:
-
+  proxy:
+    image: gcr.io/cloudsql-docker/gce-proxy:1.19.1
+    hostname: proxy
+    expose:
+      - 1433
+    command: /cloud_sql_proxy -instances=awacs-dev:asia-south1:awacs-test-db=tcp:1433
+    volumes:
+     - ~/.config:/root/.config
   db:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    restart: always
+    expose:
+    - 1433
+    environment: 
+      SA_PASSWORD: P@ssword#
+      ACCEPT_EULA: Y
+    ports:
+     - 5434:1433
+  mysqldb:
     image: mysql
     command: --default-authentication-plugin=mysql_native_password --explicit-defaults-for-timestamp=ON
     restart: always
