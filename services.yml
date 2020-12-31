@@ -4,6 +4,7 @@ services:
   proxy:
     image: gcr.io/cloudsql-docker/gce-proxy:1.19.1
     hostname: proxy
+    restart: always
     expose:
       - 1433
     command: /cloud_sql_proxy -instances=awacs-dev:asia-south1:awacs-test-db=tcp:1433
